@@ -1,0 +1,19 @@
+.paymentSection {
+    h3 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 14px;
+
+        input[type='radio'] {
+            margin-right: 10px;
+            accent-color: #000; // Чёрный цвет круга
+            transform: scale(1.2); // Увеличить радио‐кнопку примерно на 20%
+            cursor: pointer; // Указать, что это кликабельно (если нужно)
+        }
+    }
+}

@@ -1,0 +1,81 @@
+.contactSection {
+    margin-top: 20px;
+
+    h3 {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    /* Строка с телефоном и кнопкой */
+    .phoneRow {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        /* Одинаковая ширина инпута и кнопки */
+        gap: 10px;
+
+        input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            /* При необходимости задать min-width для инпута */
+        }
+
+        button {
+            border: 1px solid #000;
+            /* Чёрная обводка */
+            background: #fff;
+            /* Белый фон */
+            color: #000;
+            /* Чёрный текст */
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+
+            &:hover {
+                background: #f2f2f2;
+            }
+
+            &:active {
+                background: #e6e6e6;
+            }
+        }
+    }
+
+    /* После авторизации: сетка 2x2 */
+    .userGrid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        /* две колонки */
+        gap: 10px;
+        margin-bottom: 20px;
+        /* отступ снизу при желании */
+
+        .formItem {
+            display: flex;
+            flex-direction: column;
+
+            input {
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+        }
+    }
+
+    .disclaimer {
+        margin-top: 10px;
+        font-size: 12px;
+        color: #999;
+
+        a {
+            color: #000;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}

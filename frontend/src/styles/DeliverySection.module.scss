@@ -1,0 +1,151 @@
+.deliverySection {
+    font-family: sans-serif;
+    color: #333;
+
+    h3 {
+        font-size: 20px;
+        margin-bottom: 15px;
+    }
+
+    /* Общие стили для label+input */
+    .formRow {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 15px;
+
+        label {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .inputWrapper {
+            position: relative;
+
+            input {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+
+                &:disabled {
+                    background: #f9f9f9;
+                    cursor: not-allowed;
+                }
+            }
+
+            .clearBtn {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                font-size: 16px;
+                color: #999;
+                cursor: pointer;
+            }
+
+            .dropdown {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                background: #fff;
+                max-height: 200px;
+                overflow-y: auto;
+                z-index: 999;
+            }
+
+            .dropdownOption {
+                padding: 10px;
+                font-size: 14px;
+                border-bottom: 1px solid #eee;
+                cursor: pointer;
+
+                &:hover {
+                    background: #f2f2f2;
+                }
+
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+
+    /* Две поля (Дом + Квартира) в одну строку */
+    .twoFieldsRow {
+        display: flex;
+        gap: 20px;
+
+        .formRow {
+            flex: 1;
+            margin-bottom: 0;
+            /* убрать нижний отступ */
+        }
+    }
+
+    /* Общий контейнер для каждого способа (курьер / самовывоз) */
+    .deliveryBlock {
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        padding: 15px;
+        background: #f9f9f9;
+        /* лёгкий фон, если нужно */
+
+        /* Если radio выбран => чёрная рамка */
+        &.deliveryBlockActive {
+            border: 2px solid #000;
+        }
+
+        .deliveryHeader {
+            display: flex;
+            align-items: flex-start;
+            /* чтобы radio и заголовок сверху совпадали */
+            gap: 10px;
+            margin-bottom: 10px;
+
+            input[type='radio'] {
+                margin-top: 3px;
+                accent-color: #000;
+                transform: scale(1.1);
+            }
+        }
+
+        .deliveryInfo {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .deliveryTitle {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .deliverySubtitle {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Поля внутри блока: отдельный контейнер */
+        .deliveryFields {
+            margin-top: 10px;
+        }
+
+        .pickupLink {
+            font-size: 14px;
+            color: #000;
+            text-decoration: underline;
+
+            &:hover {
+                color: #555;
+            }
+        }
+    }
+}
