@@ -1,29 +1,31 @@
+import React from 'react';
 import Head from 'next/head';
-import { useEffect } from 'react';
-import { PageLayout } from '@/layouts/PageLayout';
-import styles from '@/styles/Home.module.scss';
+import Header from '@/components/HeaderNew';
+import CategoriesSection from '@/components/CategoriesSection';
+import NewSection from '@/components/NewSection';
+import CompanyDesc from '@/components/CompanyDesc';
+import Footer from '@/components/Footer';
 
-export default function Home() {
-  useEffect(() => {
-    console.log("API URL:", process.env.NEXT_PUBLIC_API_URL);
-  }, []);
 
+
+const HomePage: React.FC = () => {
   return (
     <>
       <Head>
-        <title>MyCoats - Главная</title>
-        <meta name="description" content="Магазин верхней одежды" />
+        <title>Интернет-магазин одежды</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <PageLayout>
-        <section className={styles.hero}>
-          <div className={styles.content}>
-            <h1>Добро пожаловать в MyCoats!</h1>
-            <p>Магазин стильной и качественной верхней одежды для всех.</p>
-            <button>Посмотреть каталог</button>
-          </div>
-        </section>
-      </PageLayout>
+      <Header />
+      <main>
+        <CategoriesSection />
+        <NewSection />
+        <CompanyDesc />
+      </main>
+      <Footer />
     </>
   );
-}
+};
+
+export default HomePage;
+
 

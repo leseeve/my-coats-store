@@ -1,0 +1,178 @@
+.card {
+  position: relative;
+  background: #fff;
+  overflow: hidden;
+  margin-bottom: 25px;
+  // border: 1px solid #ddd;
+}
+
+/* Сбрасываем стандартное оформление ссылок для кликабельных областей */
+.clickableArea {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Контейнер изображения с фиксированным соотношением 3:4 */
+.imageContainer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+}
+
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.image {
+  /* Дополнительные стили при необходимости */
+}
+
+/* Стили для кнопки избранного (сердечко) */
+.favButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favButton svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Блок overlay, который появляется поверх изображения */
+.cartOverlay {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  height: 50px;
+  background-color: #fff;
+  padding: 0 8px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* При наведении на карточку overlay появляется */
+.card:hover .cartOverlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cartContent {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  color: #000;
+}
+
+/* По умолчанию отображается текст "В КОРЗИНУ" */
+.cartText {
+  display: block;
+  transition: opacity 0.2s ease;
+}
+
+/* Блок с размерами скрыт по умолчанию */
+.cartSizes {
+  display: none;
+  gap: 3px;
+  justify-content: center;
+}
+
+/* При наведении на overlay скрываем текст и показываем размеры */
+.cartOverlay:hover {
+  .cartText {
+    display: none;
+  }
+
+  .cartSizes {
+    display: flex;
+  }
+}
+
+/* Кнопки размеров */
+.sizeButton {
+  background: transparent;
+  border: none;
+  padding: 5px 8px;
+  cursor: pointer;
+  font-size: 14px;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.sizeButton:hover {
+  color: #000;
+}
+
+.sizeButton:hover::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  border-bottom: 1px solid #000;
+}
+
+.sizeDisabled {
+  padding: 5px 8px;
+  font-size: 14px;
+  color: #aaa;
+}
+
+/* Область с информацией о товаре */
+.info {
+  text-align: left;
+  font-size: 14px;
+  padding: 15px 20px;
+}
+
+.title {
+  font-size: 1.3em;
+  font-weight: 500;
+  margin: 0 0 5px 0;
+}
+
+.price {
+  font-size: 1.1em;
+  margin: 0;
+}
+
+/* Стили для стрелочек */
+.card:hover .swiper-button-next,
+.card:hover .swiper-button-prev {
+  display: block;
+}
+
+/* Скрытие стрелочек для маленьких экранов */
+@media (max-width: 1024px) {
+
+  .cartOverlay,
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none;
+  }
+}

@@ -40,7 +40,7 @@
                 align-items: center;
                 gap: 20px;
                 margin-bottom: 20px;
-
+                border: 1px solid #ddd;
                 padding: 20px;
                 background: #fff;
 
@@ -120,7 +120,7 @@
                     margin-left: auto;
                     background: none;
                     border: none;
-                    color: #f00;
+                    color: #000000;
                     cursor: pointer;
                     font-size: 18px;
                     align-self: flex-start;
@@ -130,7 +130,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .cartContainer {
         .mainContent {
             flex-direction: column;

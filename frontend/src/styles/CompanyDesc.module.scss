@@ -1,0 +1,19 @@
+.companyDesc {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    text-align: center;
+    font-family: var(--font-montserrat), sans-serif;
+}
+
+.companyDesc h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.companyDesc p {
+    margin-bottom: 15px;
+    font-size: 1em;
+    line-height: 1.5em;
+}

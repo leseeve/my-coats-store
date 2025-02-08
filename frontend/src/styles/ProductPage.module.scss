@@ -1,0 +1,226 @@
+/* src/styles/ProductPage.module.scss */
+
+/* Корневой контейнер страницы товара */
+.productPage {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: var(--font-montserrat), sans-serif;
+}
+
+/* Глобальные селекторы для Swiper (обязательно внутри .productPage) */
+.productPage :global(.swiper-button-prev),
+.productPage :global(.swiper-button-next) {
+    display: none !important;
+}
+
+.productPage :global(.swiper-pagination) {
+    bottom: 10px !important;
+    left: 10px !important;
+    text-align: left;
+}
+
+/* Общая сетка: две колонки для десктопа, gap увеличен до 80px */
+.container {
+    display: flex;
+    gap: 80px;
+}
+
+/* Левая колонка занимает 55% ширины */
+.leftColumn {
+    width: 55%;
+}
+
+/* Правая колонка занимает 45% ширины, но максимум 360px */
+.rightColumn {
+    width: 45%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Заголовок и цена товара */
+/* Заголовок становится с меньшим нижним отступом, чтобы цена была ближе */
+.title {
+    font-size: 2em;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+.price {
+    font-size: 1.5em;
+    color: #666;
+    margin-bottom: 30px;
+    margin-top: 5px;
+}
+
+/* Изображения – общая область для галереи */
+.imageGallery {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Боковая колонка с миниатюрами (только для десктопа) */
+.thumbnails {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.thumbnail {
+    cursor: pointer;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    filter: brightness(0.7);
+    transition: filter 0.2s ease;
+}
+
+/* При наведении или если миниатюра активна – затемнение сбрасывается */
+.thumbnail.active,
+.thumbnail:hover {
+    filter: brightness(1);
+}
+
+/* Основной слайдер занимает всю оставшуюся ширину левой колонки */
+.mainSlider {
+    width: 80%;
+    position: relative;
+}
+
+/* Контейнер для главного изображения с соотношением 3:4 */
+.mainImageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+}
+
+.mainImage {
+    /* Дополнительные стили для изображения, если нужно */
+}
+
+/* Блок с действиями (выбор размера, добавление в корзину и избранное) */
+.sizeSelector {
+    width: 100%;
+}
+
+.sizeDropdown {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    margin-bottom: 25px;
+}
+
+.actionsFullWidth {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.addToCart,
+.addToFavorites {
+    padding: 10px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.addToFavorites {
+    width: 58px;
+    height: 58px;
+    background: none;
+    border: 1px solid #000;
+    margin-bottom: 50px;
+}
+
+.addToCart {
+    width: 100%;
+    height: 58px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+}
+
+/* Блок с описанием товара */
+.description {
+    font-size: 1em;
+    color: #333;
+}
+
+/* Collapsible секции */
+.collapsibleSection {
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    margin-bottom: 20px;
+}
+
+.collapsibleHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.collapsibleHeader h2 {
+    font-size: 1.2em;
+    margin: 0;
+}
+
+.arrow {
+    transition: transform 0.2s ease;
+}
+
+.arrow.open {
+    transform: rotate(180deg);
+}
+
+.collapsibleContent {
+    padding: 0;
+}
+
+/* Мобильная версия */
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .leftColumn,
+    .rightColumn {
+        width: 100%;
+        max-width: none;
+    }
+
+    .title {
+        font-size: 1.8em;
+        text-align: center;
+    }
+
+    /* Скрываем блок с миниатюрами на мобильных */
+    .thumbnails {
+        display: none;
+    }
+
+    /* Основной слайдер занимает всю ширину, стрелки скрываются */
+    .mainSlider {
+        width: 100%;
+    }
+
+    .productPage :global(.swiper-button-prev),
+    .productPage :global(.swiper-button-next) {
+        display: none !important;
+    }
+
+    .productPage :global(.swiper-pagination) {
+        bottom: 10px !important;
+        left: 10px !important;
+        text-align: left;
+    }
+
+    .mainImageWrapper {
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        height: auto;
+    }
+}

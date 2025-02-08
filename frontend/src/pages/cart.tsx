@@ -1,7 +1,7 @@
 import React from 'react';
 import { PageLayout } from '@/layouts/PageLayout';
 import { useCart } from '@/context/CartContext';
-import Image from 'next/image'; // Импортируем компонент Image
+import Image from 'next/image';
 import styles from '@/styles/Cart.module.scss';
 import DeliverySection from '@/components/DeliverySection';
 import ContactSection from '@/components/ContactSection';
@@ -27,8 +27,8 @@ const Cart = () => {
                                                 <Image
                                                     src={item.image}
                                                     alt={item.name}
-                                                    width={100} // Укажите ширину изображения
-                                                    height={100} // Укажите высоту изображения
+                                                    width={300} // Укажите ширину изображения
+                                                    height={400} // Укажите высоту изображения
                                                     className={styles.itemImage}
                                                 />
                                             </div>

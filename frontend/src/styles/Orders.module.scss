@@ -1,0 +1,18 @@
+.orders {
+    h1 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+
+    .ordersList {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .orderCard {
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+}

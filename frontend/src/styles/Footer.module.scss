@@ -1,0 +1,117 @@
+.footer {
+  background: #fff;
+  color: #000;
+  padding: 40px 20px 20px;
+  border-top: 1px solid #ccc;
+  font-size: 0.9em;
+}
+
+.footerContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+@media(min-width:768px) {
+  .footerContainer {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.footerLeft {
+  flex: 1;
+}
+
+.footerLeft h3 {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 10px;
+}
+
+.socIcon {
+  display: block;
+  width: 24px;
+  height: 24px;
+  background: #000;
+  border-radius: 50%;
+}
+
+.footerCenter {
+  flex: 1;
+}
+
+.footerCenter ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footerCenter ul li {
+  margin-bottom: 10px;
+}
+
+.footerCenter ul li a {
+  color: #000;
+  text-decoration: none;
+  font-size: 0.95em;
+}
+
+.footerRight {
+  flex: 1;
+  max-width: 300px;
+}
+
+.footerRight h3 {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.footerRight form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footerRight input[type="email"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 0.9em;
+}
+
+.policy {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  font-size: 0.8em;
+}
+
+.footerRight button {
+  padding: 8px;
+  background: #000;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background 0.3s;
+}
+
+.footerRight button:hover {
+  background: #333;
+}
+
+.footerBottom {
+  text-align: center;
+  margin-top: 30px;
+  padding-bottom: 20px;
+  border-top: 1px solid #ccc;
+  font-size: 0.8em;
+  line-height: 1.4em;
+}

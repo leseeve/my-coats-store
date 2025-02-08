@@ -1,0 +1,192 @@
+// .header {
+//     position: relative;
+//     width: 100%;
+//     height: 100vh;
+//     overflow: hidden;
+// }
+
+// .videoContainer {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 100%;
+//     overflow: hidden;
+//     z-index: 1;
+// }
+
+// .videoContainer video {
+//     width: 100%;
+//     height: 100%;
+//     object-fit: cover;
+// }
+
+// .topBar {
+//     position: fixed;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 80px;
+//     /* Высота, приведенная к 81px, как и в старом хедере */
+//     display: flex;
+//     justify-content: space-between;
+//     align-items: center;
+//     padding: 0 20px;
+//     transition: background 0.3s, color 0.3s;
+//     background: transparent;
+//     color: #fff;
+//     z-index: 9999;
+// }
+
+// .logo {
+//     text-decoration: none;
+//     font-weight: 700;
+//     font-size: 1.5em;
+//     color: inherit;
+// }
+
+// .mainNav a {
+//     color: inherit;
+//     text-decoration: none;
+//     margin-left: 20px;
+// }
+
+// .scrolled {
+//     background: #fff !important;
+//     color: #000 !important;
+// }
+
+// .scrollDownBtn {
+//     position: absolute;
+//     bottom: 20%;
+//     left: 50%;
+//     transform: translateX(-50%);
+//     padding: 30px 90px;
+//     background-color: transparent;
+//     color: #fff;
+//     border: 2px solid #fff;
+//     font-size: 20px;
+//     font-weight: 700;
+//     text-transform: uppercase;
+//     cursor: pointer;
+//     z-index: 2;
+//     transition: background-color 0.3s, color 0.3s;
+// }
+
+// .scrollDownBtn:hover {
+//     background-color: #fff;
+//     color: #000;
+// }
+
+.header {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    /* Приводим высоту к значению старого хедера */
+    overflow: hidden;
+    font-family: var(--font-montserrat), sans-serif;
+}
+
+.videoContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.videoContainer video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.topBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    /* Та же высота */
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: background 0.3s, color 0.3s;
+    background: transparent;
+    color: #fff;
+}
+
+/* Контейнер для центровки контента (логотипа) */
+.headerContainer {
+    position: relative;
+    max-width: 1440px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Логотип по центру */
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.logo a {
+    text-decoration: none;
+    color: #333;
+}
+
+/* Набор иконок справа */
+.iconLinks {
+    position: absolute;
+    right: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+.iconLinks a,
+.iconLinks button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.iconLinks img {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+}
+
+/* При скролле меняем фон и цвета */
+.scrolled {
+    background: #fff !important;
+    color: #000 !important;
+}
+
+/* Кнопка скролла вниз */
+.scrollDownBtn {
+    position: absolute;
+    bottom: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 30px 90px;
+    background-color: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+    font-size: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    z-index: 2;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.scrollDownBtn:hover {
+    background-color: #fff;
+    color: #000;
+}

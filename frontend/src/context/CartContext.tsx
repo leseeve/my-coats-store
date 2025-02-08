@@ -21,23 +21,24 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
+    // Заглушки для корзины
     const [items, setItems] = useState<CartItem[]>([
         {
             id: '1',
             name: 'Тренч из натуральной кожи',
-            sku: '432432543',
-            size: '48',
-            image: '/images/coat3.jpg',
+            sku: 'SKU-12345',
+            size: '42',
+            image: '/images/coat1.jpg',
             price: 1000,
             quantity: 1,
         },
         {
             id: '2',
-            name: 'Шампунь для волос',
-            sku: '678678123',
-            size: '52',
-            image: '/images/coat4.jpg',
-            price: 599,
+            name: 'Пальто с меховым воротником',
+            sku: 'SKU-67890',
+            size: '44',
+            image: '/images/coat3.jpg',
+            price: 2000,
             quantity: 2,
         },
     ]);

@@ -1,0 +1,19 @@
+.wishlist {
+    h1 {
+        font-size: 2em;
+        margin-bottom: 20px;
+        margin-top: 0;
+    }
+
+    .productsGrid {
+        display: grid;
+        grid-gap: 10px;
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .wishlist .productsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

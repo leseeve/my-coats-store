@@ -1,0 +1,94 @@
+.newSection {
+    padding: 30px 20px;
+    width: 100%;
+    font-family: var(--font-montserrat), sans-serif;
+}
+
+.newTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.seeAll {
+    text-decoration: none;
+    color: #000;
+    font-size: 1em;
+}
+
+.swiperContainer {
+    position: relative;
+}
+
+.newSwiper {
+    /* дополнительные стили, если нужно */
+}
+
+.swiperSlide {
+    flex-shrink: 0;
+    width: auto;
+    max-width: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.newCard {
+    width: 450px;
+    height: 600px;
+    background-color: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+.newImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.newTitle {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 5px;
+    font-size: 0.9em;
+    color: #000;
+}
+
+.newPrice {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 5px;
+    font-size: 0.9em;
+    color: #000;
+}
+
+.swiperButtonPrev,
+.swiperButtonNext {
+    color: #000;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    cursor: pointer;
+}
+
+.newPrev {
+    left: 20px;
+}
+
+.newNext {
+    right: 20px;
+}

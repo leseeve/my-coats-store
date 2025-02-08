@@ -1,0 +1,68 @@
+.categoriesSection {
+    padding: 30px 20px;
+    width: 100%;
+}
+
+.swiperContainer {
+    position: relative;
+}
+
+.categoriesSwiper {
+    /* дополнительные стили, если нужно */
+}
+
+.swiperSlide {
+    flex-shrink: 0;
+    width: auto;
+    max-width: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+}
+
+.categoryCard {
+    width: 450px;
+    height: 600px;
+    background-color: #fff;
+    overflow: hidden;
+    position: relative;
+}
+
+.catImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.catTitle {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    padding: 5px;
+    font-size: 0.9em;
+    color: #000;
+}
+
+.swiperButtonPrev,
+.swiperButtonNext {
+    color: #000;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    cursor: pointer;
+}
+
+.catPrev {
+    left: 20px;
+}
+
+.catNext {
+    right: 20px;
+}

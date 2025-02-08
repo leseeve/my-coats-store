@@ -4,12 +4,14 @@ import { useCart } from '@/context/CartContext';
 
 const Checkout = () => {
     const { items, total, clearCart } = useCart();
+
     const [formData, setFormData] = useState({
         name: '',
         address: '',
         paymentMethod: 'card',
     });
 
+    // Универсальный обработчик изменения полей
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -28,39 +30,23 @@ const Checkout = () => {
             <form onSubmit={handleSubmit}>
                 <label>
                     Имя:
-                    <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                    />
+                    <input type="text" name="name" value={formData.name} onChange={handleInputChange} required />
                 </label>
-                <br />
+
                 <label>
                     Адрес доставки:
-                    <input
-                        type="text"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                        required
-                    />
+                    <input type="text" name="address" value={formData.address} onChange={handleInputChange} required />
                 </label>
-                <br />
+
                 <label>
                     Способ оплаты:
-                    <select
-                        name="paymentMethod"
-                        value={formData.paymentMethod}
-                        onChange={handleInputChange}
-                    >
+                    <select name="paymentMethod" value={formData.paymentMethod} onChange={handleInputChange}>
                         <option value="card">Карта</option>
                         <option value="paypal">PayPal</option>
                         <option value="cash">Наличные</option>
                     </select>
                 </label>
-                <br />
+
                 <button type="submit">Подтвердить заказ</button>
             </form>
         </PageLayout>

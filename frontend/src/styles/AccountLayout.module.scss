@@ -1,0 +1,69 @@
+/* src/styles/AccountLayout.module.scss */
+.accountLayout {
+    max-width: 1440px;
+    margin: 0 auto;
+    display: flex;
+}
+
+/* Левая панель занимает 25% на больших экранах */
+.sidebarWrapper {
+    width: 25%;
+    /* На больших экранах видна всегда; для мобильных будет абсолютное позиционирование */
+    transition: none;
+    /* моментальное появление */
+}
+
+/* Правая часть занимает 75% на больших экранах */
+.contentWrapper {
+    width: 75%;
+    padding: 20px;
+    transition: none;
+    /* моментальное скрытие */
+}
+
+/* Класс для скрытия правой панели */
+.hidden {
+    display: none;
+}
+
+.sidebarToggle {
+    display: none;
+}
+
+/* Медиа-запрос для экранов меньше 768px */
+@media (max-width: 768px) {
+    .sidebarWrapper {
+        position: absolute;
+        top: 80px;
+        /* отступ равен высоте хедера */
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 80px);
+        background: #fff;
+        z-index: 100;
+        /* При открытии панели сразу появляется (без плавного перехода) */
+        transform: translateX(-100%);
+    }
+
+    .sidebarWrapper.open {
+        transform: translateX(0);
+    }
+
+    .contentWrapper {
+        width: 100%;
+    }
+
+    .sidebarToggle {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-size: 1.2em;
+        margin-bottom: 20px;
+    }
+
+    .toggleText {
+        margin-left: 8px;
+    }
+}
