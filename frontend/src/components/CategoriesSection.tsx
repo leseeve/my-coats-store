@@ -35,9 +35,21 @@ const CategoriesSection: React.FC = () => {
                     {categories.map((cat) => (
                         <SwiperSlide key={cat.id} className={styles.swiperSlide}>
                             <div className={styles.categoryCard}>
+                                {/* Ссылка для изображения */}
                                 <Link href="#">
-                                    <Image src={cat.image} alt="Категория" width={450} height={600} className={styles.catImage} />
-                                    <div className={styles.catTitle}>{cat.title}</div>
+                                    <Image
+                                        src={cat.image}
+                                        alt="Категория"
+                                        width={450}
+                                        height={600}
+                                        className={styles.catImage}
+                                    />
+                                </Link>
+                                {/* Ссылка для подписи, которая теперь находится под изображением */}
+                                <Link href="#" className={styles.catCaptionLink}>
+                                    <div className={styles.catCaption}>
+                                        <div className={styles.catTitle}>{cat.title}</div>
+                                    </div>
                                 </Link>
                             </div>
                         </SwiperSlide>
@@ -51,3 +63,4 @@ const CategoriesSection: React.FC = () => {
 };
 
 export default CategoriesSection;
+

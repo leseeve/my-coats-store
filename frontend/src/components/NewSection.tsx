@@ -39,10 +39,22 @@ const NewSection: React.FC = () => {
                     {newProducts.map((prod) => (
                         <SwiperSlide key={prod.id} className={styles.swiperSlide}>
                             <div className={styles.newCard}>
-                                <Link href="#">
-                                    <Image src={prod.image} alt="Новинка" width={450} height={600} className={styles.newImage} />
-                                    <div className={styles.newTitle}>{prod.title}</div>
-                                    <div className={styles.newPrice}>{prod.price}</div>
+                                {/* Ссылка на страницу продукта (можно настроить URL) */}
+                                <Link href="/product-detail">
+                                    <Image
+                                        src={prod.image}
+                                        alt="Новинка"
+                                        width={450}
+                                        height={600}
+                                        className={styles.newImage}
+                                    />
+                                </Link>
+                                {/* Обёртываем блок с текстом в ссылку */}
+                                <Link href="/product-detail" className={styles.cardCaptionsLink}>
+                                    <div className={styles.cardCaptions}>
+                                        <div className={styles.newTitle}>{prod.title}</div>
+                                        <div className={styles.newPrice}>{prod.price}</div>
+                                    </div>
                                 </Link>
                             </div>
                         </SwiperSlide>

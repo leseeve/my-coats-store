@@ -1,41 +1,61 @@
-import React from 'react';
-import { useCart } from '@/context/CartContext'; // <-- Важно
+import React, { useState } from 'react';
+import { useCart } from '@/context/CartContext'; // Используем контекст корзины
 import styles from '@/styles/SummarySection.module.scss';
 
 const SummarySection = () => {
     const { items, total } = useCart();
 
-    // Проверка на undefined
     if (!items || total === undefined) {
         return <p>Корзина пуста.</p>;
     }
 
-    // Пример логики доставки:
+    const [promoCode, setPromoCode] = useState('');
     const shippingCost = total >= 10000 ? 0 : 300;
     const finalPrice = total + shippingCost;
 
     const handleCheckout = () => {
-        // Здесь будет реальная логика оформления заказа.
         console.log(`Заказ оформлен. Итог: ${finalPrice.toLocaleString()} ₽`);
-        // Можно сделать fetch('/api/orders') или открыть модальное окно.
     };
 
     return (
         <section className={styles.summarySection}>
-            <h2>Ваш заказ</h2>
-            {/* Покажем суммарную стоимость товаров */}
-            <p>Товары: {total.toLocaleString()} ₽</p>
-            {/* Стоимость доставки */}
-            <p>Доставка: {shippingCost === 0 ? 'Бесплатно' : `${shippingCost} ₽`}</p>
+            <h2>Сумма заказа</h2>
+
+            {/* Поле ввода промокода */}
+            <div className={styles.promoCodeContainer}>
+                <input
+                    type="text"
+                    placeholder="Введите промокод"
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value)}
+                    className={styles.promoInput}
+                />
+                <button className={styles.applyPromo}>→</button>
+            </div>
+
+            {/* Стоимость товаров */}
+            <div className={styles.orderDetails}>
+                <p>
+                    Стоимость продуктов
+                    <span>{total.toLocaleString()} ₽</span>
+                </p>
+                <p>
+                    Доставка
+                    <span>{shippingCost === 0 ? 'Бесплатно' : `${shippingCost} ₽`}</span>
+                </p>
+            </div>
+
+            {/* Итоговая сумма */}
             <h3>ИТОГО: {finalPrice.toLocaleString()} ₽</h3>
-            <button
-                className={styles.checkoutButton}
-                onClick={handleCheckout}
-            >
+
+            {/* Кнопка оплаты */}
+            <button className={styles.checkoutButton} onClick={handleCheckout}>
                 Оплатить
             </button>
+
         </section>
     );
 };
 
 export default SummarySection;
+

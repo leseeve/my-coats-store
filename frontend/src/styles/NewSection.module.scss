@@ -30,46 +30,50 @@
     width: auto;
     max-width: 450px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    /* для вертикального расположения изображения и подписей */
     margin-right: 10px;
 }
 
 .newCard {
     width: 450px;
-    height: 600px;
     background-color: #fff;
     overflow: hidden;
-    position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .newImage {
     width: 100%;
-    height: 100%;
+    height: auto;
+    /* либо можно задать фиксированную высоту, если нужно */
     object-fit: cover;
 }
 
+/* Новый блок для подписей под карточкой */
+.cardCaptions {
+    padding: 10px 20px;
+    /* опционально, для выделения блока */
+    text-align: left;
+    /* выравнивание текста по левому краю */
+}
+
+/* Дополнительный класс для стилей ссылки на блок с подписями */
+.cardCaptionsLink {
+    text-decoration: none;
+    color: inherit;
+    /* чтобы ссылка не изменяла цвет текста */
+}
+
 .newTitle {
-    position: absolute;
-    bottom: 20px;
-    left: 0;
-    right: 0;
-    background: rgba(255, 255, 255, 0.8);
-    text-align: center;
-    padding: 5px;
-    font-size: 0.9em;
-    color: #000;
+    font-size: 1.3em;
+    font-weight: 500;
+    margin: 0 0 5px 0;
 }
 
 .newPrice {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(255, 255, 255, 0.8);
-    text-align: center;
-    padding: 5px;
-    font-size: 0.9em;
+    margin: 0;
+    font-size: 1.1em;
     color: #000;
 }
 

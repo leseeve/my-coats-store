@@ -1,17 +1,13 @@
 .swiper-button-prev,
 .swiper-button-next {
     color: #000 !important;
-    /* Задаем черный цвет стрелок */
     transform: scale(0.5) !important;
-    /* Уменьшаем размер кнопок в два раза */
     width: 40px !important;
-    /* Фиксированная ширина */
     height: 40px !important;
-    /* Фиксированная высота */
     z-index: 10 !important;
-    /* Делаем кнопки поверх других элементов */
     pointer-events: auto !important;
-    /* Убеждаемся, что клики проходят */
+    display: none;
+    /* Скрываем стрелочки по умолчанию */
 }
 
 /* Если Swiper использует псевдоэлемент ::after для стрелок */
@@ -20,13 +16,20 @@
     color: #000 !important;
 }
 
+/* Показываем стрелочки при наведении на контейнер слайдера */
+.swiper:hover .swiper-button-prev,
+.swiper:hover .swiper-button-next {
+    display: block !important;
+    /* Показываем стрелочки при наведении на слайдер */
+}
+
 /* При наведении меняем прозрачность */
 .swiper-button-prev:hover,
 .swiper-button-next:hover {
     opacity: 0.8 !important;
 }
 
-/* Настраиваем позиционирование, если требуется */
+/* Настроим позиционирование, если требуется */
 .swiper-button-prev {
     left: 5px !important;
 }
