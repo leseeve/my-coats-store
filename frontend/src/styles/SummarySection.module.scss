@@ -1,42 +1,30 @@
 .summarySection {
-    border: 1px solid #ddd;
+    min-width: 345px;
+    // border: 1px solid #ddd;
     padding: 20px;
-    background: white;
-    text-align: left;
-    max-width: 480px;
-    /* Увеличиваем ширину блока */
-    position: fixed;
-    /* Фиксированное позиционирование */
-    top: 13%;
-    /* Отступ сверху */
-    right: 32px;
-    /* Отступ справа */
     z-index: 1000;
-    /* Тень для блока */
     background-color: white;
 
     h2 {
-        font-size: 1.25em;
-        /* Размер текста для заголовка */
+        font-size: 24px;
         margin-bottom: 20px;
-        /* Отступ снизу */
     }
 
     .promoCodeContainer {
         display: flex;
         align-items: center;
         border: 1px solid #000;
-        padding: 8px;
-        margin-bottom: 16px;
+        padding: 10px;
+        margin-bottom: 12px;
         border-radius: 1px;
-        background-color: #f9f9f9;
+        background-color: #fff;
 
         .promoInput {
             flex: 1;
             border: none;
             outline: none;
             padding: 8px;
-            font-size: 0.875em;
+            font-size: 16px;
             border-radius: 1px;
             background-color: transparent;
         }
@@ -44,7 +32,7 @@
         .applyPromo {
             background: none;
             border: none;
-            font-size: 1.25em;
+            font-size: 22px;
             cursor: pointer;
             padding-left: 8px;
         }
@@ -57,53 +45,50 @@
         p {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
+            font-size: 16px;
         }
 
-        /* Добавим отступ между текстом и ценой */
         p span {
-            margin-left: 75px;
-            /* Добавляем отступ слева для цены */
-            font-weight: bold;
-            /* Сделаем цену жирной для выделения */
+            margin-left: 60px;
         }
     }
 
     h3 {
-        font-size: 1.125em;
-        font-weight: bold;
+        font-size: 18px;
         margin-top: 16px;
         border-bottom: 1px solid #ddd;
-        padding-bottom: 8px;
+        padding-bottom: 16px;
     }
 
     .checkoutButton {
         width: 100%;
+        height: 60px;
         padding: 12px;
-        background: linear-gradient(to right, #000, #333);
-        color: #fff;
-        border: none;
+        background: #fff;
+        color: #000;
+        border: 1px solid #000;
         cursor: pointer;
-        font-size: 1em;
+        font-size: 18px;
         margin-top: 16px;
         border-radius: 1px;
 
         &:hover {
-            background: linear-gradient(to right, #333, #555);
+            background: #f2f2f2;
+        }
+
+        &:active {
+            background: #e6e6e6;
         }
     }
 
     @media (max-width: 1024px) {
         position: relative;
-        /* Меняем на относительное позиционирование, чтобы блок не оставался фиксированным */
         top: auto;
-        /* Убираем фиксированное положение */
         width: 100%;
-        /* Блок растягиваем на всю ширину */
         margin-top: 20px;
-        /* Отступ сверху */
+        padding: 0;
 
-        /* Перемещаем блок с суммой заказа ниже блока с оплатой */
         .summarySection {
             position: relative;
             margin-top: 20px;

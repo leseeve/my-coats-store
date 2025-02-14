@@ -3,6 +3,7 @@
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-weight: 500;
 }
 
 html,
@@ -11,7 +12,7 @@ body {
   padding: 0;
   padding-top: 40px;
   font-family: var(--font-montserrat), sans-serif;
-  color: #333;
+  color: black;
 }
 
 input,
@@ -24,3 +25,7 @@ h4,
 div {
   font-family: var(--font-montserrat), sans-serif;
 }
+
+// input:focus {
+//   border: 6px solid red;
+// }

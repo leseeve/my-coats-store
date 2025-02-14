@@ -1,0 +1,104 @@
+// src/styles/OrderDetails.module.scss
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+    background-color: #fff;
+    color: #000;
+    font-family: var(--font-montserrat), sans-serif;
+}
+
+/* Номер заказа */
+.orderNumber {
+    font-size: 24px;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+/* Блок информации о заказе */
+.orderInfo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    align-items: flex-start;
+
+    .infoItem {
+        display: flex;
+    }
+
+    .label {
+        font-size: 16px;
+        margin-bottom: 5px;
+    }
+
+    .value {
+        font-size: 16px;
+    }
+}
+
+/* Блок с суммой заказа */
+.orderSummary {
+    margin-bottom: 20px;
+
+    .summaryHeader {
+        font-size: 24px;
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+    .summaryItem {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 10px;
+        font-size: 16px;
+    }
+}
+
+/* Блок с карточками товаров */
+.orderProducts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.productCard {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.productImage {
+    width: 100%;
+    height: 120px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.productDetails {
+    text-align: center;
+
+    .productName {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .productPrice {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 3px;
+    }
+
+    .productQuantity {
+        font-size: 12px;
+        color: #666;
+    }
+}
+
+@media (max-width: 768px) {
+    .orderInfo {
+        grid-template-columns: 1fr;
+    }
+}

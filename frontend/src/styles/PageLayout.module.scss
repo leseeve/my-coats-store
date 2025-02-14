@@ -1,0 +1,12 @@
+/* src/styles/PageLayout.module.scss */
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Контейнер занимает минимум высоту окна */
+}
+
+.mainContent {
+    flex: 1;
+    /* Основное содержимое занимает всё свободное пространство */
+}

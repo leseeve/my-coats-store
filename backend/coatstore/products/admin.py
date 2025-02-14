@@ -1,29 +1,48 @@
 from django.contrib import admin
 from django import forms
-from .models import Product, Size, Order, OrderItem
+from .models import Product, Size, Order, OrderItem, Category, Color, PromoCode
 
-# Кастомная форма для модели Product с изменённым виджетом для поля sizes
+# Кастомная форма для модели Product с изменёнными виджетами для полей sizes, category и colors
 class ProductAdminForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = '__all__'
-
+    
     sizes = forms.ModelMultipleChoiceField(
         queryset=Size.objects.all(),
         widget=forms.CheckboxSelectMultiple
+    )
+    colors = forms.ModelMultipleChoiceField(
+        queryset=Color.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
     )
 
 # Админка для Product с дополнительными настройками
 class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm
-    list_display = ('id', 'name', 'price', 'stock')  # отображаем id и основные поля
-    search_fields = ('name',)
-    list_filter = ('sizes',)
+    list_display = ('id', 'name', 'sku', 'price', 'stock', 'category')
+    search_fields = ('name', 'sku',)
+    list_filter = ('sizes', 'category', 'colors')
 
-# Админка для Size, чтобы отображался id вместе с размером и описанием
 class SizeAdmin(admin.ModelAdmin):
     list_display = ('id', 'size_value', 'description')
     search_fields = ('size_value',)
+
+# Админка для Category
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'description')
+    search_fields = ('name',)
+
+# Админка для Color
+class ColorAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'hex_code')
+    search_fields = ('name',)
+
+# Админка для PromoCode
+class PromoCodeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'code', 'discount_percentage', 'active', 'expiration_date', 'usage_limit', 'used_count')
+    search_fields = ('code',)
 
 # Инлайн для OrderItem, используемый в OrderAdmin
 class OrderItemInline(admin.TabularInline):
@@ -42,8 +61,10 @@ class OrderItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'order', 'product', 'quantity')
     search_fields = ('order__id', 'product__name')
 
-# Регистрация моделей с кастомными админ-классами
 admin.site.register(Product, ProductAdmin)
 admin.site.register(Size, SizeAdmin)
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Color, ColorAdmin)
+admin.site.register(PromoCode, PromoCodeAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderItem, OrderItemAdmin)

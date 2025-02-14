@@ -34,6 +34,10 @@
         grid-template-columns: repeat(4, 1fr); // 4 карточки в строке
         gap: 3px; // Фиксированное расстояние между карточками
 
+        @media (max-width: 1024px) {
+            grid-template-columns: repeat(3, 1fr); // 2 карточки в строке
+        }
+
         @media (max-width: 768px) {
             grid-template-columns: repeat(2, 1fr); // 2 карточки в строке
         }

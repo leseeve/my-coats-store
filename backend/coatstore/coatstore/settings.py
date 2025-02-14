@@ -76,7 +76,8 @@ DATABASES = {
         'NAME': 'coatstore',
         'USER': 'postgres',
         'PASSWORD': 'Mario228',
-        'HOST': 'db',
+        # 'HOST': 'db',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     }
 }

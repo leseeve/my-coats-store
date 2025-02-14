@@ -1,19 +1,127 @@
+/* src/styles/SidebarAccount.module.scss */
+
 .sidebar {
     width: 100%;
-    /* Контейнер для навигации внутри левого блока */
-    padding: 20px;
+    padding: 85px 20px 80px 20px;
+    display: flex;
+    justify-content: center;
+    // align-items: center;
+    height: 100%;
 }
 
 .nav {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    /* выравнивание по правой стороне */
+    gap: 60px;
+    width: 100%;
+}
+
+/* Общий стиль для текста ссылок */
+.linkText {
+    text-align: right;
+    flex-grow: 1;
+}
+
+/* Стили для primary группы */
+.primaryGroup {
+    display: flex;
+    flex-direction: column;
     gap: 20px;
 }
 
-.navLink {
-    font-size: 1.5em;
+.primaryNavLink {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
     text-decoration: none;
-    color: #333;
+    color: black;
+}
+
+/* Стили для secondary группы */
+.secondaryGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.primaryGroup {
+    .linkText {
+        font-size: 20px;
+    }
+}
+
+/* Вложенные стили для текста ссылок в secondaryGroup */
+.secondaryGroup {
+    .linkText {
+        font-size: 13px;
+    }
+}
+
+.secondaryNavLink {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    text-decoration: none;
+    background: none;
+    border: none;
+    color: black;
+    font-size: 1.5em;
+    /* Пока такой же размер, можно скорректировать ниже для десктопа */
+}
+
+/* Desktop (min-width: 769px) */
+@media (min-width: 769px) {
+    .primaryNavLink {
+        font-size: 1.5em;
+    }
+
+    .secondaryNavLink {
+        font-size: 1.5em;
+        /* Если нужно сделать меньше, например, 1.2em, то: font-size: 1.2em; */
+    }
+
+    /* Для primary группы: отображаем индикатор только для активной ссылки */
+    .primaryNavLink .indicator {
+        display: none;
+    }
+
+    .primaryNavLink.active .indicator {
+        display: block;
+        width: 40px;
+        border-bottom: 2px solid black;
+        margin-left: 10px;
+    }
+
+    /* Для secondary группы: отображаем индикатор для активной ссылки */
+    .secondaryNavLink .indicator {
+        display: none;
+    }
+
+    .secondaryNavLink.active .indicator {
+        display: block;
+        width: 40px;
+        border-bottom: 2px solid black;
+        margin-left: 10px;
+    }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+
+    .primaryNavLink,
+    .secondaryNavLink {
+        font-size: 1.2em;
+    }
+
+    .indicator {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        border-top: 6px solid transparent;
+        border-bottom: 6px solid transparent;
+        border-left: 6px solid black;
+        margin-left: 10px;
+    }
 }

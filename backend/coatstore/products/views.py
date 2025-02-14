@@ -1,90 +1,131 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.db.models import F
-from .models import Product, Order, OrderItem, Cart, CartItem, Size
-from .serializers import (
-    ProductSerializer,
-    OrderSerializer,
-    UserRegistrationSerializer,
-    UserLoginSerializer,
-    UserSerializer,
-    CartSerializer,
-    CartItemSerializer
+from .models import (
+    Product, Order, OrderItem, Cart, CartItem, Size, Category, Color,
+    PromoCode, Favorite, RecentlyViewed, Profile
 )
-from django.contrib.auth import authenticate, login  # Импортируем login
+from .serializers import (
+    ProductSerializer, OrderSerializer, UserRegistrationSerializer,
+    UserLoginSerializer, UserSerializer, CartSerializer, CartItemSerializer,
+    PromoCodeSerializer, ProfileSerializer
+)
+from django.contrib.auth import authenticate, login
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
 from django_filters import rest_framework as filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import OrderingFilter
+from django.utils import timezone
 
-# Класс фильтрации для продуктов
+# Фильтрация продуктов с поддержкой категории, цветов, поиска по sku и имени
 class ProductFilter(filters.FilterSet):
-    min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')  # Минимальная цена
-    max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')  # Максимальная цена
-    name = filters.CharFilter(field_name="name", lookup_expr='icontains')  # Поиск по названию
-    size = filters.ModelMultipleChoiceFilter(
-        field_name="sizes",
-        queryset=Size.objects.all()
-    )  # Фильтр по размерам
-
+    min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
+    max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
+    name = filters.CharFilter(field_name="name", lookup_expr='icontains')
+    sku = filters.CharFilter(field_name="sku", lookup_expr='icontains')
+    category = filters.NumberFilter(field_name="category__id", lookup_expr='exact')
+    colors = filters.ModelMultipleChoiceFilter(
+        field_name="colors", queryset=Color.objects.all()
+    )
+    
     class Meta:
         model = Product
-        fields = ['min_price', 'max_price', 'name', 'size']
+        fields = ['min_price', 'max_price', 'name', 'sku', 'category', 'colors']
 
-# Представление для списка продуктов
+# Список продуктов с сортировкой (по умолчанию по цене по возрастанию)
 class ProductListView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.AllowAny]  # Доступно всем
-    filter_backends = [DjangoFilterBackend]  # Включаем фильтрацию
-    filterset_class = ProductFilter  # Подключаем класс фильтрации
+    permission_classes = [permissions.AllowAny]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filterset_class = ProductFilter
+    ordering_fields = ['price']
+    ordering = ['price']
 
-# Представление для создания товара
 class ProductCreateView(generics.CreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAdminUser]  # Только администраторы
+    permission_classes = [permissions.IsAdminUser]
 
-# Представление для обновления товара
 class ProductUpdateView(generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAdminUser]  # Только администраторы
+    permission_classes = [permissions.IsAdminUser]
 
-# Представление для удаления товара
 class ProductDeleteView(generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [permissions.IsAdminUser]  # Только администраторы
+    permission_classes = [permissions.IsAdminUser]
 
-# Представление для списка заказов
-class OrderListView(generics.ListCreateAPIView):
-    queryset = Order.objects.all()
+# Эндпоинт для похожих товаров: товары из той же категории, исключая текущий товар
+class SimilarProductsView(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    def get(self, request, pk):
+        try:
+            product = Product.objects.get(id=pk)
+        except Product.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+        if product.category:
+            similar = Product.objects.filter(category=product.category).exclude(id=product.id)
+        else:
+            similar = Product.objects.exclude(id=product.id)
+        serializer = ProductSerializer(similar, many=True)
+        return Response(serializer.data)
+
+# Эндпоинт для записи просмотра товара (для аутентифицированных пользователей)
+class RecordProductView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request):
+        product_id = request.data.get('product_id')
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+        RecentlyViewed.objects.update_or_create(
+            user=request.user,
+            product=product,
+            defaults={'viewed_at': timezone.now()}
+        )
+        return Response({'message': 'Product view recorded'}, status=status.HTTP_200_OK)
+
+# Эндпоинт для получения недавно просмотренных товаров
+class RecentlyViewedListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ProductSerializer
+    
+    def get_queryset(self):
+        recent = RecentlyViewed.objects.filter(user=self.request.user)
+        product_ids = recent.values_list('product__id', flat=True)
+        return Product.objects.filter(id__in=product_ids)
+
+# Заказы: для не-администраторов возвращаются только заказы текущего пользователя
+class OrderListView(generics.ListAPIView):
     serializer_class = OrderSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Только авторизованные пользователи
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Order.objects.all()
+        return Order.objects.filter(customer=user)
 
-    def perform_create(self, serializer):
-        # Устанавливаем текущего пользователя как автора заказа
-        serializer.save(customer=self.request.user)
-
-# Представление для деталей заказа
 class OrderDetailView(generics.RetrieveAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Только авторизованные пользователи
+    permission_classes = [permissions.IsAuthenticated]
 
-# Регистрация нового пользователя
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer
-    permission_classes = [permissions.AllowAny]  # Доступно всем
+    permission_classes = [permissions.AllowAny]
 
-# Авторизация пользователя
 class UserLoginView(APIView):
-    permission_classes = [permissions.AllowAny]  # Доступно всем
-
+    permission_classes = [permissions.AllowAny]
+    
     def post(self, request):
         serializer = UserLoginSerializer(data=request.data)
         if serializer.is_valid():
@@ -92,20 +133,43 @@ class UserLoginView(APIView):
             password = serializer.validated_data['password']
             user = authenticate(username=username, password=password)
             if user:
-                login(request, user)  # Создаем сессию для пользователя
+                login(request, user)
                 user_serializer = UserSerializer(user)
                 return Response(user_serializer.data)
             return Response({'error': 'Invalid credentials'}, status=400)
         return Response(serializer.errors, status=400)
 
-# Представление для получения корзины
+# Эндпоинты для профиля пользователя (чтобы обновлять данные: фамилия, имя, город, телефон, почта)
+class ProfileUpdateView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request):
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+    
+    def put(self, request):
+        user = request.user
+        data = request.data
+        # Обновляем стандартные поля пользователя
+        user.first_name = data.get('first_name', user.first_name)
+        user.last_name = data.get('last_name', user.last_name)
+        user.email = data.get('email', user.email)
+        user.save()
+        # Обновляем данные профиля
+        profile = user.profile
+        profile.city = data.get('city', profile.city)
+        profile.phone = data.get('phone', profile.phone)
+        profile.save()
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+# Корзина
 class CartView(APIView):
     def get(self, request):
-        # Если пользователь авторизован, ищем корзину по пользователю
         if request.user.is_authenticated:
             cart, created = Cart.objects.get_or_create(user=request.user)
         else:
-            # Если пользователь не авторизован, ищем корзину по сессии
             session_key = request.session.session_key
             if not session_key:
                 request.session.create()
@@ -114,17 +178,14 @@ class CartView(APIView):
         serializer = CartSerializer(cart)
         return Response(serializer.data)
 
-# Представление для добавления товара в корзину
 class AddToCartView(APIView):
     def post(self, request):
         product_id = request.data.get('product_id')
         quantity = request.data.get('quantity', 1)
-        # Проверяем, есть ли такой продукт
         try:
             product = Product.objects.get(id=product_id)
         except Product.DoesNotExist:
             return Response({'error': 'Product does not exist'}, status=status.HTTP_404_NOT_FOUND)
-        # Находим корзину пользователя
         if request.user.is_authenticated:
             cart, created = Cart.objects.get_or_create(user=request.user)
         else:
@@ -133,25 +194,19 @@ class AddToCartView(APIView):
                 request.session.create()
                 session_key = request.session.session_key
             cart, created = Cart.objects.get_or_create(session_key=session_key)
-        # Добавляем товар в корзину
         cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
         if created:
-            # Если товар только что создан, устанавливаем количество равным переданному значению
             cart_item.quantity = quantity
         else:
-            # Если товар уже существует, увеличиваем количество на переданное значение
             cart_item.quantity += quantity
-        # Проверяем, чтобы количество товара не превышало доступный запас
         if cart_item.quantity > product.stock:
             return Response(
                 {'error': f'Not enough stock for {product.name}. Available: {product.stock}'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        # Сохраняем изменения
         cart_item.save()
         return Response({'message': 'Item added to cart', 'quantity': cart_item.quantity})
 
-# Представление для удаления товара из корзины
 class RemoveFromCartView(APIView):
     def delete(self, request, cart_item_id):
         try:
@@ -161,22 +216,18 @@ class RemoveFromCartView(APIView):
         except CartItem.DoesNotExist:
             return Response({'error': 'Cart item does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
-# Представление для создания заказа из корзины
+# Создание заказа с поддержкой промокода
 class CreateOrderView(APIView):
-    permission_classes = [permissions.IsAuthenticated]  # Только авторизованные пользователи
-
+    permission_classes = [permissions.IsAuthenticated]
+    
     def post(self, request):
-        # Находим корзину пользователя
         try:
             cart = Cart.objects.get(user=request.user)
         except Cart.DoesNotExist:
             return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
-        # Проверяем, есть ли товары в корзине
         if not cart.items.exists():
             return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
-        # Создаем заказ
         order = Order.objects.create(customer=request.user)
-        # Добавляем товары из корзины в заказ
         total_price = 0
         for cart_item in cart.items.all():
             OrderItem.objects.create(
@@ -185,29 +236,86 @@ class CreateOrderView(APIView):
                 quantity=cart_item.quantity
             )
             total_price += cart_item.product.price * cart_item.quantity
-        # Устанавливаем общую сумму заказа
+        promo_code_str = request.data.get('promo_code')
+        if promo_code_str:
+            try:
+                promo = PromoCode.objects.get(code=promo_code_str)
+                if not promo.is_valid():
+                    return Response({'error': 'Invalid or expired promo code'}, status=status.HTTP_400_BAD_REQUEST)
+                discount = promo.discount_percentage
+                total_price = total_price * (100 - discount) / 100
+                promo.apply_usage()
+            except PromoCode.DoesNotExist:
+                return Response({'error': 'Promo code does not exist'}, status=status.HTTP_404_NOT_FOUND)
         order.total_price = total_price
         order.save()
-        # Очищаем корзину
         cart.items.all().delete()
-        # Возвращаем созданный заказ
         serializer = OrderSerializer(order)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-# Представление для обновления статуса заказа
+# Обновление статуса заказа (только для администраторов)
 class UpdateOrderStatusView(generics.UpdateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [permissions.IsAdminUser]  # Только администраторы
-
+    permission_classes = [permissions.IsAdminUser]
+    
     def update(self, request, *args, **kwargs):
-        # Разрешаем частичное обновление, чтобы можно было передать только поле status
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
-
+    
     def perform_update(self, serializer):
         new_status = self.request.data.get('status')
         if new_status in dict(Order.STATUS_CHOICES):
             serializer.save(status=new_status)
         else:
             raise ValidationError({'status': 'Invalid status'})
+
+# Эндпоинты для избранного
+class AddFavoriteView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request):
+        product_id = request.data.get('product_id')
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+        fav, created = Favorite.objects.get_or_create(user=request.user, product=product)
+        if created:
+            return Response({'message': 'Product added to favorites'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({'message': 'Product already in favorites'}, status=status.HTTP_200_OK)
+
+class RemoveFavoriteView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def delete(self, request, product_id):
+        try:
+            fav = Favorite.objects.get(user=request.user, product__id=product_id)
+            fav.delete()
+            return Response({'message': 'Product removed from favorites'}, status=status.HTTP_200_OK)
+        except Favorite.DoesNotExist:
+            return Response({'error': 'Favorite not found'}, status=status.HTTP_404_NOT_FOUND)
+
+class FavoriteListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = ProductSerializer
+    
+    def get_queryset(self):
+        favorites = Favorite.objects.filter(user=self.request.user)
+        product_ids = favorites.values_list('product__id', flat=True)
+        return Product.objects.filter(id__in=product_ids)
+
+# Эндпоинт для SEO информации и Яндекс Метрики
+class SEOInfoView(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    def get(self, request):
+        seo_info = {
+            "yandex_metrica_counter_id": "YOUR_YANDEX_METRICA_COUNTER_ID",  # Замените на реальный ID
+            "metatags": {
+                "default_title": "Интернет-магазин My Coats Store",
+                "default_description": "Лучшие товары по отличным ценам. Покупайте онлайн в My Coats Store.",
+            }
+        }
+        return Response(seo_info)

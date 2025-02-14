@@ -149,7 +149,7 @@ export default function Catalog() {
       </Head>
       <PageLayout>
         <section className={styles.catalog}>
-          <h1>ЖЕНСКАЯ ВЕРХНЯЯ ОДЕЖДА - НОВИНКИ КАТАЛОГА</h1>
+          <h1>КАТАЛОГ ЖЕСКОЙ ОДЕЖДЫ</h1>
           <div className={styles.categories}>
             <button>Куртки</button>
             <button>Шубы</button>

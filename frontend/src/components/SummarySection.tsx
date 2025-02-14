@@ -36,11 +36,11 @@ const SummarySection = () => {
             {/* Стоимость товаров */}
             <div className={styles.orderDetails}>
                 <p>
-                    Стоимость продуктов
+                    Товары:
                     <span>{total.toLocaleString()} ₽</span>
                 </p>
                 <p>
-                    Доставка
+                    Доставка:
                     <span>{shippingCost === 0 ? 'Бесплатно' : `${shippingCost} ₽`}</span>
                 </p>
             </div>
