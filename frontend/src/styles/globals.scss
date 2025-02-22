@@ -58,10 +58,12 @@ input {
 .rc-slider-tracks {
   height: 2px !important;
   background-color: #000 !important;
-  border-radius: none !important;
 }
 
 .rc-slider-rail {
   height: 2px !important;
-  border-radius: none !important;
+}
+
+.rc-slider-step {
+  height: 2px !important;
 }

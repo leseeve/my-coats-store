@@ -1,0 +1,52 @@
+.breadcrumbContainer {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 14px;
+    color: #666;
+
+    a {
+        text-decoration: none;
+        color: #666;
+    }
+}
+
+.backButton {
+    font-size: 14px;
+    color: #666;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.breadcrumbsSeparator {
+    color: #aaa;
+}
+
+.crumbItem {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.breadcrumbLink {
+    color: #666;
+}
+
+.crumbSeparator {
+    margin-left: 5px;
+    color: #aaa;
+}
+
+.currentCrumb {
+    color: #333;
+    font-weight: 500;
+}

@@ -1,0 +1,50 @@
+.sortWrapper {
+    position: relative;
+    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sortButton {
+    padding: 10px 0 10px 10px;
+    border: 1px solid #ddd;
+    // border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sortArrow {
+    width: 25px;
+    height: 25px;
+    font-size: 25px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.sortDropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    z-index: 999;
+    width: 100%;
+}
+
+.sortOption {
+    font-size: 14px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.sortOption:hover {
+    background-color: #f3f3f3;
+}
+
+.activeSort {
+    background-color: #ddd;
+}

@@ -1,0 +1,156 @@
+.filtersButton {
+    padding: 10px 20px 10px 0;
+    text-align: left;
+    // border: 1px solid #ddd;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .filtersIcon {
+        width: 25px;
+        height: 25px;
+        fill: #000;
+        font-size: 25px;
+    }
+}
+
+.filtersText {
+    font-size: 14px;
+}
+
+/* Оверлей и контейнер фильтров с анимацией появления */
+.filtersOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
+}
+
+.filtersOverlay.active {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease-in-out, visibility 0s linear 0s;
+}
+
+.filtersContainer {
+    width: 25%;
+    background-color: white;
+    height: 100%;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.filtersContainer.active {
+    transform: translateX(0);
+}
+
+.filtersHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.closeButton {
+    font-size: 20px;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.resetButton {
+    font-size: 14px;
+    color: #999;
+    cursor: pointer;
+    background: none;
+    border: none;
+    flex-shrink: 0;
+    margin: 10px 0;
+}
+
+.priceFilter {
+    margin: 20px 0;
+}
+
+.rangeWrapper {
+    margin: 10px 0;
+}
+
+.colorFilter,
+.sizeFilter {
+    margin: 20px 0;
+}
+
+.filterHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 5px 0;
+}
+
+.filterToggle {
+    font-size: 18px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.filterTitle {
+    flex: 1;
+    font-weight: bold;
+}
+
+.resetButtonFilter {
+    font-size: 12px;
+    color: #999;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.filterOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding-left: 10px;
+}
+
+.showProductsButtonContainer {
+    margin-top: auto;
+}
+
+.showProductsButton {
+    margin-top: auto;
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    margin-bottom: 40px;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #333;
+    }
+}

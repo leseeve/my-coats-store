@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { PageLayout } from '@/layouts/PageLayout';
 import { ProductCard } from '@/components/ProductCard';
-import styles from '@/styles/Catalog.module.scss';
+import styles from '@/styles/2Catalog.module.scss';
 import Link from 'next/link';
 
 // Массив с товарами (пример)
