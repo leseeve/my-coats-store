@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { IoIosArrowDown, IoIosArrowUp } from 'react-icons/io';
+import React, { useState, useEffect, useRef } from 'react';
+import { IoIosArrowDown } from 'react-icons/io';
 import styles from '@/styles/SortDropdown.module.scss';
 
 export interface SortOption {
@@ -19,38 +19,60 @@ export const SortDropdown: React.FC<SortDropdownProps> = ({
     onSortChange,
 }) => {
     const [open, setOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     const handleSortChange = (value: string) => {
         onSortChange(value);
         setOpen(false);
     };
 
+    // Закрывать список, если клик вне его
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target as Node)
+            ) {
+                setOpen(false);
+            }
+        };
+
+        if (open) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        // Чистим обработчик при размонтировании компонента
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [open]);
+
     return (
-        <div className={styles.sortWrapper}>
-            <button className={styles.sortButton} onClick={() => setOpen(!open)}>
+        <div className={styles.sortWrapper} ref={dropdownRef}>
+            <button
+                className={styles.sortButton}
+                onClick={() => setOpen(!open)}
+            >
                 {sortOptions.find((o) => o.value === currentSort)?.label ?? 'Сортировка'}
-                <span className={styles.sortArrow}>
-                    {open ? (
-                        <IoIosArrowUp className={styles.sortIcon} />
-                    ) : (
-                        <IoIosArrowDown className={styles.sortIcon} />
-                    )}
+                <span className={`${styles.sortArrow} ${open ? styles.open : ''}`}>
+                    <IoIosArrowDown className={styles.sortIcon} />
                 </span>
             </button>
-            {open && (
-                <div className={styles.sortDropdown}>
-                    {sortOptions.map((option) => (
-                        <div
-                            key={option.value}
-                            className={`${styles.sortOption} ${currentSort === option.value ? styles.activeSort : ''
-                                }`}
-                            onClick={() => handleSortChange(option.value)}
-                        >
-                            {option.label}
-                        </div>
-                    ))}
-                </div>
-            )}
+            <div className={`${styles.sortDropdown} ${open ? styles.open : ''}`}>
+                {sortOptions.map((option) => (
+                    <div
+                        key={option.value}
+                        className={`${styles.sortOption} ${currentSort === option.value ? styles.activeSort : ''
+                            }`}
+                        onClick={() => handleSortChange(option.value)}
+                    >
+                        {option.label}
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
+

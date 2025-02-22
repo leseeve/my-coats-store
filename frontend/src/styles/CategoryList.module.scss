@@ -1,10 +1,11 @@
 .categories {
     margin-bottom: 20px;
     display: flex;
-    gap: 10px;
+    gap: 20px;
 }
 
 .categoryButton {
+    min-width: 120px;
     padding: 10px 20px;
     border: 1px solid #ddd;
     background: none;

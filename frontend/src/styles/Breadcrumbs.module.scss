@@ -1,17 +1,17 @@
 .breadcrumbContainer {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 0 0 20px 0;
+    padding: 0 0 30px 0;
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .breadcrumbs {
     display: flex;
     align-items: center;
-    gap: 15px;
-    font-size: 14px;
+    gap: 10px;
+    font-size: 13px;
     color: #666;
 
     a {
@@ -21,7 +21,7 @@
 }
 
 .backButton {
-    font-size: 14px;
+    font-size: 13px;
     color: #666;
     text-decoration: none;
     cursor: pointer;
@@ -34,7 +34,7 @@
 .crumbItem {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .breadcrumbLink {
@@ -42,7 +42,6 @@
 }
 
 .crumbSeparator {
-    margin-left: 5px;
     color: #aaa;
 }
 

@@ -1,21 +1,20 @@
 .sortWrapper {
+    min-width: 220px;
     position: relative;
-    display: inline-block;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
 }
 
 .sortButton {
-    padding: 10px 0 10px 10px;
-    border: 1px solid #ddd;
-    // border: none;
+    padding: 10px 10px 10px 0;
+    border: none;
     background-color: transparent;
     cursor: pointer;
     font-size: 14px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 7px;
 }
 
 .sortArrow {
@@ -25,26 +24,42 @@
     transition: transform 0.3s ease-in-out;
 }
 
+.sortArrow.open {
+    transform: rotate(180deg);
+}
+
 .sortDropdown {
     position: absolute;
     top: 100%;
-    left: 0;
+    left: -15px;
     background-color: white;
     border: 1px solid #ddd;
+    box-shadow: 0px 8px 20px 7px rgba(0, 0, 0, 0.2);
     z-index: 999;
     width: 100%;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.sortDropdown.open {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
 .sortOption {
     font-size: 14px;
     padding: 10px;
     cursor: pointer;
+    transition: color 0.2s ease;
 }
 
 .sortOption:hover {
-    background-color: #f3f3f3;
+    color: #959595;
 }
 
 .activeSort {
-    background-color: #ddd;
+    font-weight: 600;
 }

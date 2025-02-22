@@ -1,8 +1,6 @@
 // src/pages/wishlist.tsx
 import React from 'react';
 import Head from 'next/head';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import AccountLayout from '@/components/AccountLayout';
 import { ProductCard } from '@/components/ProductCard';
 import styles from '@/styles/Wishlist.module.scss';
