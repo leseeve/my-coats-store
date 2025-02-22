@@ -43,5 +43,3 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ children }) => {
 };
 
 export default AccountLayout;
-
-
