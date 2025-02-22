@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { GoPerson, GoHeart, GoSearch, } from "react-icons/go";
+import { IoBagOutline } from "react-icons/io5";
 import styles from '@/styles/HeaderNew.module.scss';
 
 const HeaderNew: React.FC = () => {
@@ -43,17 +44,17 @@ const HeaderNew: React.FC = () => {
                         <Link href="/">UnholyPlace</Link>
                     </div>
                     <div className={styles.iconLinks}>
-                        <Link href="/catalog">
-                            <Image src="/icons/search.svg" alt="Поиск" width={24} height={24} />
+                        <Link href="/catalog" className={styles.LinkIcon}>
+                            <GoSearch />
                         </Link>
-                        <Link href="/orders">
-                            <Image src="/icons/user.svg" alt="Личный кабинет" width={24} height={24} />
+                        <Link href="/orders" className={styles.LinkIcon}>
+                            <GoPerson />
                         </Link>
-                        <Link href="/wishlist">
-                            <Image src="/icons/heart.svg" alt="Избранное" width={24} height={24} />
+                        <Link href="/wishlist" className={styles.LinkIcon}>
+                            <GoHeart />
                         </Link>
-                        <Link href="/cart">
-                            <Image src="/icons/cart.svg" alt="Корзина" width={24} height={24} />
+                        <Link href="/cart" className={styles.LinkIcon}>
+                            <IoBagOutline />
                         </Link>
                     </div>
                 </div>

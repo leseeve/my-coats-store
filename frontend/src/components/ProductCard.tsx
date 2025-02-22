@@ -47,7 +47,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             navigation
             spaceBetween={0}
             slidesPerView={1}
-            grabCursor
             className={styles.swiper}
           >
             {images.map((img, index) => (
@@ -120,3 +119,5 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     </div>
   );
 };
+
+

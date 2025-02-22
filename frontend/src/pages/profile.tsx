@@ -1,7 +1,5 @@
 import React from 'react';
 import Head from 'next/head';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import AccountLayout from '@/components/AccountLayout';
 import styles from '@/styles/Profile.module.scss';
 
@@ -11,7 +9,6 @@ const Profile: React.FC = () => {
             <Head>
                 <title>Мой кабинет | Unholy Place</title>
             </Head>
-            <Header />
             <AccountLayout>
                 <div className={styles.profile}>
                     <h1>Мой профиль</h1>
@@ -40,7 +37,6 @@ const Profile: React.FC = () => {
                     </form>
                 </div>
             </AccountLayout>
-            <Footer />
         </>
     );
 };

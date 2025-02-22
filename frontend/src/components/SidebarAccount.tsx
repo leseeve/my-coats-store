@@ -17,8 +17,8 @@ const primaryNavItems: NavItem[] = [
 
 const secondaryNavItems: NavItem[] = [
     { label: 'ДОСТАВКА И ВОЗВРАТ', href: '/shipping-and-return' },
-    { label: 'НАСТРОЙКА УВЕДОМЛЕНИЙ', href: '/notifications' },
-    { label: 'СЛУЖБА ПОДДЕРЖКИ', href: '/support' },
+    { label: 'УВЕДОМЛЕНИЯ', href: '/notifications' },
+    { label: 'СЛУЖБА ПОДДЕРЖКИ', href: '/contacts' },
     { label: 'ВЫЙТИ', href: '/logout' },
 ];
 

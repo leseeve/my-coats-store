@@ -52,13 +52,14 @@
 
 /* Логотип по центру */
 .logo {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: bold;
 }
 
 .logo a {
     text-decoration: none;
     color: #333;
+    font-weight: 600;
 }
 
 /* Набор иконок справа */
@@ -66,20 +67,19 @@
     position: absolute;
     right: 20px;
     display: flex;
-    gap: 20px;
+    gap: 16px;
 }
 
-.iconLinks a,
-.iconLinks button {
+.LinkIcon {
+    width: 25px;
+    height: 25px;
+    font-size: 25px;
+    justify-content: center;
+    align-items: center;
+    color: #333;
     background: none;
     border: none;
     cursor: pointer;
-}
-
-.iconLinks img {
-    width: 24px;
-    height: 24px;
-    object-fit: cover;
 }
 
 /* При скролле меняем фон и цвета */

@@ -6,7 +6,6 @@ import Footer from '@/components/Footer';
 import AccountLayout from '@/components/AccountLayout';
 import styles from '@/styles/OrderDetails.module.scss';
 import Image from 'next/image';
-import Link from 'next/link';
 
 interface OrderProduct {
     id: string;
@@ -14,6 +13,8 @@ interface OrderProduct {
     image: string;
     price: number;
     quantity: number;
+    sku: string;
+    size: string;
 }
 
 interface OrderDetails {
@@ -41,8 +42,24 @@ const order: OrderDetails = {
     shippingCost: 0,
     total: 5000,
     products: [
-        { id: '1', name: 'Тренч из натуральной кожи', image: '/images/coat1.jpg', price: 3000, quantity: 1 },
-        { id: '2', name: 'Пальто с меховым воротником', image: '/images/coat3.jpg', price: 2000, quantity: 1 },
+        {
+            id: '1',
+            name: 'Тренч из натуральной кожи',
+            image: '/images/coat1.jpg',
+            price: 3000,
+            quantity: 1,
+            sku: 'SKU-12345',
+            size: '42'
+        },
+        {
+            id: '2',
+            name: 'Пальто с меховым воротником',
+            image: '/images/coat3.jpg',
+            price: 2000,
+            quantity: 1,
+            sku: 'SKU-67890',
+            size: '44'
+        },
     ],
 };
 
@@ -53,7 +70,6 @@ const OrderDetailsPage: React.FC = () => {
                 <title>Заказ {order.id} | MyCoats</title>
                 <meta name="description" content={`Подробности заказа ${order.id}`} />
             </Head>
-            <Header />
             <AccountLayout>
                 <div className={styles.container}>
                     {/* Номер заказа */}
@@ -104,21 +120,34 @@ const OrderDetailsPage: React.FC = () => {
                         {order.products.map((prod) => (
                             <div key={prod.id} className={styles.productCard}>
                                 <div className={styles.productImage}>
-                                    <Image src={prod.image} alt={prod.name} width={100} height={120} objectFit="cover" />
+                                    <Image
+                                        src={prod.image}
+                                        alt={prod.name}
+                                        width={100}
+                                        height={120}
+                                        objectFit="cover"
+                                    />
                                 </div>
                                 <div className={styles.productDetails}>
-                                    <span className={styles.productName}>{prod.name}</span>
-                                    <span className={styles.productPrice}>
-                                        {(prod.price * prod.quantity).toLocaleString()} ₽
-                                    </span>
-                                    <span className={styles.productQuantity}>x {prod.quantity}</span>
+                                    <div className={styles.detailsLeft}>
+                                        <span className={styles.productName}>{prod.name}</span>
+                                        <div className={styles.productInfo}>
+                                            <span className={styles.productSku}>Артикул: {prod.sku}</span>
+                                            <span className={styles.productSize}>Размер: {prod.size}</span>
+                                        </div>
+                                    </div>
+                                    <div className={styles.detailsRight}>
+                                        <span className={styles.productQuantity}>x {prod.quantity}</span>
+                                        <span className={styles.productPrice}>
+                                            {(prod.price * prod.quantity).toLocaleString()} ₽
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
             </AccountLayout>
-            <Footer />
         </>
     );
 };

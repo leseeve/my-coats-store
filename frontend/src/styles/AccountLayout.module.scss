@@ -1,25 +1,33 @@
 /* src/styles/AccountLayout.module.scss */
+
+.pageWrapper {
+    width: 100%;
+}
+
 .accountLayout {
     max-width: 1440px;
     margin: 0 auto;
     display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 358px);
+}
+
+.mainContentWrapper {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
 }
 
 .sidebarWrapper {
-    min-width: 288px;
-    /* На больших экранах видна всегда; для мобильных будет абсолютное позиционирование */
-    transition: none;
-    /* моментальное появление */
+    width: 288px;
+    transition: transform 0.3s ease;
 }
 
 .contentWrapper {
-    width: 1080px;
-    padding: 20px 20px 80px 20px;
-    transition: none;
-    /* моментальное скрытие */
+    flex-grow: 1;
+    padding: 10px 40px 80px 40px;
 }
 
-/* Класс для скрытия правой панели */
 .hidden {
     display: none;
 }
@@ -28,18 +36,26 @@
     display: none;
 }
 
-/* Медиа-запрос для экранов меньше 768px */
+.footerWrapper {
+    width: 100%;
+}
+
 @media (max-width: 768px) {
+    .accountLayout {
+        flex-direction: column;
+    }
+
+    .mainContentWrapper {
+        flex-direction: column;
+    }
+
     .sidebarWrapper {
         position: absolute;
         top: 80px;
-        /* отступ равен высоте хедера */
         left: 0;
-        width: 100%;
         height: calc(100vh - 80px);
-        background: #fff;
         z-index: 100;
-        /* При открытии панели сразу появляется (без плавного перехода) */
+        background: #fff;
         transform: translateX(-100%);
     }
 
@@ -49,6 +65,7 @@
 
     .contentWrapper {
         width: 100%;
+        padding: 20px 20px 80px 20px;
     }
 
     .sidebarToggle {

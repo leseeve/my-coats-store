@@ -1,0 +1,82 @@
+// src/styles/Contacts.module.scss
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+    background-color: #fff;
+    color: #000;
+    font-family: var(--font-montserrat), sans-serif;
+    text-align: left;
+
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+    }
+}
+
+.contactDetails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start;
+    margin-bottom: 30px;
+
+    .contactItem {
+        flex: 1 1 200px;
+        max-width: 300px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        /* Убираем border-radius */
+        text-align: left;
+
+        h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        a {
+            font-size: 16px;
+            color: #000;
+            text-decoration: none;
+            word-break: break-all;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        /* Для блока адреса: убираем любые дополнительные стили,
+         оставляем простой текст */
+        p {
+            margin: 0;
+            font-size: 16px;
+        }
+    }
+}
+
+.additionalInfo {
+    max-width: 800px;
+    text-align: left;
+
+    h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+}
+
+/* Для мобильных устройств */
+@media (max-width: 768px) {
+    .contactDetails {
+        flex-direction: column;
+    }
+}

@@ -30,6 +30,28 @@ const products = [
             { size: 44, available: true },
         ],
     },
+    {
+        id: 3,
+        title: 'Куртка',
+        price: 10999,
+        images: ['/images/coat2.jpg', '/images/coat2_2.jpg'],
+        availableSizes: [
+            { size: 40, available: true },
+            { size: 42, available: false },
+            { size: 44, available: true },
+        ],
+    },
+    {
+        id: 4,
+        title: 'Куртка',
+        price: 10999,
+        images: ['/images/coat2.jpg', '/images/coat2_2.jpg'],
+        availableSizes: [
+            { size: 40, available: true },
+            { size: 42, available: false },
+            { size: 44, available: true },
+        ],
+    },
     // Добавьте другие товары по необходимости
 ];
 
@@ -39,7 +61,6 @@ const Wishlist: React.FC = () => {
             <Head>
                 <title>Избранное | Unholy Place</title>
             </Head>
-            <Header />
             <AccountLayout>
                 <div className={styles.wishlist}>
                     <h1>Избранное</h1>
@@ -57,7 +78,6 @@ const Wishlist: React.FC = () => {
                     </div>
                 </div>
             </AccountLayout>
-            <Footer />
         </>
     );
 };

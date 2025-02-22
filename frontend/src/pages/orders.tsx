@@ -44,7 +44,6 @@ const Orders: React.FC = () => {
             <Head>
                 <title>Заказы | MyCoats</title>
             </Head>
-            <Header />
             <AccountLayout>
                 <div className={styles.orders}>
                     <h1>Мои заказы</h1>
@@ -71,7 +70,6 @@ const Orders: React.FC = () => {
                     </div>
                 </div>
             </AccountLayout>
-            <Footer />
         </>
     );
 };

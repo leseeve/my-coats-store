@@ -1,8 +1,8 @@
 /* src/styles/SidebarAccount.module.scss */
 
 .sidebar {
-    width: 100%;
-    padding: 85px 20px 80px 20px;
+    min-width: 288px;
+    padding: 75px 20px 80px 20px;
     display: flex;
     justify-content: center;
     // align-items: center;
@@ -20,6 +20,8 @@
 .linkText {
     text-align: right;
     flex-grow: 1;
+    font-weight: 600;
+
 }
 
 /* Стили для primary группы */

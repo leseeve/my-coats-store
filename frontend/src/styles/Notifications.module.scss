@@ -2,33 +2,53 @@
 .container {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 20px;
     background-color: #fff;
     color: #000;
     font-family: var(--font-montserrat), sans-serif;
+    text-align: left;
 
     h1 {
         font-size: 24px;
         margin-bottom: 20px;
-        text-align: center;
     }
+}
 
-    .toggleGroup {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-        margin-bottom: 30px;
+.toggleGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.toggleLabel {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        accent-color: #000;
+        /* Если требуется черный цвет переключателя */
     }
+}
 
-    .toggleLabel {
-        font-size: 16px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
+/* Стили для кнопок, основанные на стилистике сайта */
+.buttonGroup {
+    text-align: left;
+}
 
-        input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-        }
+.saveButton {
+    background-color: #000;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: #333;
     }
 }

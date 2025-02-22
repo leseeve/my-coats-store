@@ -10,11 +10,16 @@ import styles from '@/styles/CategoriesSection.module.scss';
 SwiperCore.use([Navigation]);
 
 const categories = [
-    { id: 1, image: '/images/coat1.jpg', title: 'Свитеры и джемперы' },
-    { id: 2, image: '/images/coat2.jpg', title: 'Экошубы' },
-    { id: 3, image: '/images/coat3.jpg', title: 'Пальто' },
-    { id: 4, image: '/images/coat4.jpg', title: 'Пальто' },
-    { id: 5, image: '/images/coat5.jpg', title: 'Свитеры и джемперы' },
+    { id: 1, image: '/images/coat1.jpg', title: 'Пальто' },
+    { id: 2, image: '/images/coat2.jpg', title: 'Платья' },
+    { id: 3, image: '/images/coat3.jpg', title: 'Пиджаки' },
+    { id: 4, image: '/images/coat4.jpg', title: 'Рубашки' },
+    { id: 5, image: '/images/coat5.jpg', title: 'Блузы' },
+    { id: 6, image: '/images/coat1.jpg', title: 'Юбки' },
+    { id: 7, image: '/images/coat2.jpg', title: 'Брюки' },
+    { id: 8, image: '/images/coat3.jpg', title: 'Жакеты' },
+    { id: 9, image: '/images/coat4.jpg', title: 'Плащи' },
+    { id: 10, image: '/images/coat5.jpg', title: 'Куртки' },
 ];
 
 const CategoriesSection: React.FC = () => {

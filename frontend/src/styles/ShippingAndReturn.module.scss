@@ -2,7 +2,6 @@
 .container {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 20px;
     background-color: #fff;
     color: #000;
     font-family: var(--font-montserrat), sans-serif;
@@ -10,7 +9,7 @@
     h1 {
         font-size: 24px;
         margin-bottom: 20px;
-        text-align: center;
+        text-align: left;
     }
 }
 
