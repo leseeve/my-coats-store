@@ -1,8 +1,6 @@
 // src/pages/order/[id].tsx
 import React from 'react';
 import Head from 'next/head';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import AccountLayout from '@/components/AccountLayout';
 import styles from '@/styles/OrderDetails.module.scss';
 import Image from 'next/image';

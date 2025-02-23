@@ -145,94 +145,6 @@ const productsData: Product[] = [
       { size: 44, available: true },
     ],
   },
-  {
-    id: 1,
-    title: 'Жилет',
-    price: 1000,
-    images: ['/images/coat1.jpg', '/images/coat1_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 2,
-    title: 'Куртка',
-    price: 3000,
-    images: ['/images/coat2.jpg', '/images/coat2_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 3,
-    title: 'Пальто',
-    price: 9000,
-    images: ['/images/coat3.jpg', '/images/coat3_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 4,
-    title: 'Плащ',
-    price: 12000,
-    images: ['/images/coat4.jpg', '/images/coat4_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 1,
-    title: 'Жилет',
-    price: 1000,
-    images: ['/images/coat1.jpg', '/images/coat1_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 2,
-    title: 'Куртка',
-    price: 3000,
-    images: ['/images/coat2.jpg', '/images/coat2_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 3,
-    title: 'Пальто',
-    price: 9000,
-    images: ['/images/coat3.jpg', '/images/coat3_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 4,
-    title: 'Плащ',
-    price: 12000,
-    images: ['/images/coat4.jpg', '/images/coat4_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
 ];
 
 const allCategories = [
@@ -374,6 +286,12 @@ export default function Catalog() {
 
           <h1>Каталог женской одежды</h1>
 
+          <CategoryList
+            categories={allCategories}
+            selectedCategory={selectedCategory}
+            onCategoryClick={handleCategoryClick}
+          />
+
           <section className={styles.ButtonsSortWrapper}>
             <FiltersPanel
               onReset={handleResetFilters}
@@ -396,12 +314,6 @@ export default function Catalog() {
               onSortChange={handleSortChange}
             />
           </section>
-
-          <CategoryList
-            categories={allCategories}
-            selectedCategory={selectedCategory}
-            onCategoryClick={handleCategoryClick}
-          />
 
           <ProductGrid products={loadedProducts} />
 

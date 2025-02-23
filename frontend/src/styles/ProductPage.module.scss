@@ -2,9 +2,9 @@
 
 /* Корневой контейнер страницы товара */
 .productPage {
-    max-width: 1440px;
+    width: 1440px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 0 20px 20px 20px;
     font-family: var(--font-montserrat), sans-serif;
 }
 
@@ -16,51 +16,48 @@
 
 .productPage :global(.swiper-pagination) {
     bottom: 10px !important;
-    left: 10px !important;
-    text-align: left;
+    text-align: center;
 }
 
-/* Общая сетка: две колонки для десктопа, gap увеличен до 80px */
+.breadcrumbsWrapper {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 5px 0 0 20px;
+}
+
 .container {
     display: flex;
-    gap: 80px;
+    gap: 50px;
 }
 
-/* Левая колонка занимает 55% ширины */
 .leftColumn {
-    width: 55%;
+    min-width: 684px
 }
 
-/* Правая колонка занимает 45% ширины, но максимум 360px */
 .rightColumn {
-    width: 45%;
-    max-width: 360px;
+    min-width: 500px;
     display: flex;
     flex-direction: column;
 }
 
-/* Заголовок и цена товара */
 .title {
-    font-size: 2em;
+    font-size: 24px;
     margin-bottom: 5px;
-    margin-top: 10px;
-    text-transform: uppercase
 }
 
 .price {
-    font-size: 1.5em;
+    font-size: 18px;
     margin-bottom: 30px;
     margin-top: 5px;
 }
 
-/* Изображения – общая область для галереи */
 .imageGallery {
     display: flex;
+    width: 684px;
     gap: 10px;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
 
-/* Боковая колонка с миниатюрами (только для десктопа) */
 .thumbnails {
     display: flex;
     flex-direction: column;
@@ -191,18 +188,17 @@
     width: 100%;
     margin-top: 40px;
     padding: 20px 0;
-    background-color: #f7f7f7;
 }
 
 .fullWidthBlock h2 {
-    font-size: 1.8em;
-    text-align: center;
+    font-size: 24px;
+    text-align: left;
     margin-bottom: 20px;
 }
 
 /* Стили для карусели (Swiper) внутри этих блоков */
 .carouselSwiper {
-    padding: 0 20px;
+    padding: 0 0;
 }
 
 /* Мобильная версия */

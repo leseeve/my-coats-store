@@ -1,4 +1,3 @@
-// src/pages/product[id].tsx
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Header from '@/components/Header';
@@ -12,6 +11,9 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import styles from '@/styles/ProductPage.module.scss';
 import { ProductCard } from '@/components/ProductCard';
+import { Breadcrumbs, BreadcrumbItem } from '@/components/Breadcrumbs'
+import { IoIosArrowDown } from 'react-icons/io';
+
 
 // Регистрируем модули Swiper
 SwiperCore.use([Navigation, Pagination]);
@@ -35,13 +37,13 @@ const ProductPage: React.FC = () => {
     // Заглушка для текущего товара
     const product: Product = {
         id: 1,
-        title: 'УТЕПЛЕННОЕ ПАЛЬТО',
+        title: 'Пальто генг-холд он еее',
         price: 2999,
         description:
             'Это подробное описание товара. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vitae magna id metus consectetur congue.',
         delivery: 'Доставка осуществляется в течение 3-5 рабочих дней. Бесплатная доставка при заказе свыше 3000 ₽.',
         composition: 'Состав: 100% шерсть. Теплое, удобное, долговечное.',
-        images: ['/images/coat1.jpg', '/images/coat2.jpg', '/images/coat3.jpg'],
+        images: ['/images/coat1.jpg', '/images/coat2.jpg', '/images/coat3.jpg', '/images/coat3.jpg'],
         availableSizes: [40, 42, 38, 44].map((s) => ({ size: s, available: true })),
     };
 
@@ -107,11 +109,24 @@ const ProductPage: React.FC = () => {
         console.log('Добавляем товар в избранное');
     };
 
+    // Хлебные крошки для карточки товара
+    const breadcrumbs: BreadcrumbItem[] = [
+        { label: 'Главная', href: '/' },
+        { label: 'Каталог', href: '/catalog' },
+        { label: 'Пальто', href: '/catalog/palto' }, // Пример пути к категории
+        { label: product.title, href: '' },
+    ];
+
     return (
         <>
             <Header />
+            {/* Хлебные крошки */}
+            <div className={styles.breadcrumbsWrapper}>
+                <Breadcrumbs items={breadcrumbs} />
+            </div>
             <div className={styles.productPage}>
                 <div className={styles.container}>
+
                     {/* Левая колонка: изображения */}
                     <div className={styles.leftColumn}>
                         <div className={styles.imageGallery}>
@@ -125,8 +140,8 @@ const ProductPage: React.FC = () => {
                                         <Image
                                             src={img}
                                             alt={`${product.title} миниатюра ${index + 1}`}
-                                            width={60}
-                                            height={80}
+                                            width={126}
+                                            height={168}
                                             objectFit="cover"
                                         />
                                     </div>
@@ -148,7 +163,7 @@ const ProductPage: React.FC = () => {
                                                     src={img}
                                                     alt={`${product.title} изображение ${index + 1}`}
                                                     fill
-                                                    objectFit="cover"
+                                                    // objectFit="cover"
                                                     className={styles.mainImage}
                                                 />
                                             </div>
