@@ -1,0 +1,38 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 67vh;
+    background-color: #fff;
+    color: #000;
+    font-family: var(--font-montserrat), sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+.errorCode {
+    font-size: 72px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.errorMessage {
+    font-size: 24px;
+    margin-bottom: 40px;
+}
+
+.homeLink {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: #555;
+    }
+}

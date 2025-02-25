@@ -23,15 +23,18 @@
 
     .infoItem {
         display: flex;
+        justify-content: space-between;
+        width: 100%;
     }
 
     .label {
         font-size: 16px;
-        margin-bottom: 5px;
+        margin-bottom: 10px;
     }
 
     .value {
         font-size: 16px;
+        text-align: right;
     }
 }
 
