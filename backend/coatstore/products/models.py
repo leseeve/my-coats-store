@@ -2,18 +2,19 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-# Новая модель для категорий товаров
+# Модель категории с возможностью создания подкатегорий
 class Category(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='subcategories')
+
     def __str__(self):
         return self.name
 
-# Новая модель для цветов
+# Модель цвета
 class Color(models.Model):
     name = models.CharField(max_length=50)
-    hex_code = models.CharField(max_length=7, blank=True, null=True)  # например, "#FFFFFF"
+    hex_code = models.CharField(max_length=7, blank=True, null=True)  # Например, "#FFFFFF"
     
     def __str__(self):
         return self.name
@@ -33,7 +34,7 @@ class Product(models.Model):
     description = models.TextField()         # Описание товара
     price = models.DecimalField(max_digits=10, decimal_places=2)  # Цена товара
     stock = models.IntegerField()            # Количество товара на складе
-    sizes = models.ManyToManyField(Size)       # Доступные размеры
+    sizes = models.ManyToManyField(Size)     # Доступные размеры
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
@@ -107,10 +108,10 @@ class Favorite(models.Model):
 # Модель для промокодов
 class PromoCode(models.Model):
     code = models.CharField(max_length=50, unique=True)
-    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)  # например, 10.00 для 10%
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)  # Например, 10.00 для 10%
     active = models.BooleanField(default=True)
     expiration_date = models.DateTimeField(blank=True, null=True)
-    usage_limit = models.PositiveIntegerField(blank=True, null=True)  # максимальное количество использований
+    usage_limit = models.PositiveIntegerField(blank=True, null=True)  # Максимальное количество использований
     used_count = models.PositiveIntegerField(default=0)
     
     def __str__(self):
@@ -161,3 +162,4 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
          Profile.objects.create(user=instance)
     else:
          instance.profile.save()
+

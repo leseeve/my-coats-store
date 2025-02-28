@@ -1,39 +1,32 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { PageLayout } from '@/layouts/PageLayout';
-import { ProductCard } from '@/components/ProductCard';
-import styles from '@/styles/2Catalog.module.scss';
-import Link from 'next/link';
+import { Breadcrumbs, BreadcrumbItem } from '@/components/Breadcrumbs';
+import { CategoryList } from '@/components/CategoryList';
+import { FiltersPanel } from '@/components/FiltersPanel';
+import { SortDropdown, SortOption } from '@/components/SortDropdown';
+import { ProductGrid, Product } from '@/components/ProductGrid';
+import { Pagination } from '@/components/Pagination';
+import { transliterate } from '@/utils/transliterate';
+import styles from '@/styles/CatalogCategory.module.scss';
 
-// Массив с товарами (пример)
-const products = [
+// Примерный массив товаров
+const productsData: Product[] = [
     {
         id: 1,
-        title: 'Пальто №1',
-        price: 4999,
-        images: ['/images/coat3.jpg', '/images/coat3_2.jpg'],
+        title: 'Жилет',
+        price: 1000,
+        images: ['/images/coat1.jpg', '/images/coat1_2.jpg'],
         availableSizes: [
             { size: 40, available: true },
-            { size: 42, available: true },
+            { size: 42, available: false },
             { size: 44, available: true },
         ],
     },
-    {
-        id: 2,
-        title: 'Пальто №2',
-        price: 5999,
-        images: ['/images/coat3.jpg', '/images/coat3_2.jpg'],
-        availableSizes: [
-            { size: 40, available: true },
-            { size: 42, available: true },
-            { size: 44, available: true },
-        ],
-    },
-    // ... и т.д.
+    // другие товары...
 ];
 
-// Массив всех категорий на русском
 const allCategories = [
     'Пальто',
     'Платья',
@@ -47,120 +40,169 @@ const allCategories = [
     'Куртки',
 ];
 
-const transliterate = (text: string) => {
-    const map: { [key: string]: string } = {
-        'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh', 'З': 'Z', 'И': 'I',
-        'Й': 'Y', 'К': 'K', 'Л': 'L', 'М': 'M', 'Н': 'N', 'О': 'O', 'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T',
-        'У': 'U', 'Ф': 'F', 'Х': 'H', 'Ц': 'Ts', 'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Shch', 'Ъ': '', 'Ы': 'Y', 'Э': 'E',
-        'Ю': 'Yu', 'Я': 'Ya', 'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh',
-        'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r',
-        'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'shch', 'ъ': '',
-        'ы': 'y', 'э': 'e', 'ю': 'yu', 'я': 'ya', ' ': '-', '-': '-'
-    };
+const sortOptions: SortOption[] = [
+    { value: 'default', label: 'По умолчанию' },
+    { value: 'priceAsc', label: 'По возрастанию цены' },
+    { value: 'priceDesc', label: 'По убыванию цены' },
+    { value: 'oldFirst', label: 'Сначала старые товары' },
+    { value: 'newFirst', label: 'Сначала новые товары' },
+];
 
-    // Основная транслитерация
-    let result = text.split('').map((char) => map[char] || char).join('').toLowerCase();
-
-    // Убираем символ 'ь' из строки после основной транслитерации
-    result = result.replace(/ь/g, '').replace(/Ь/g, '');
-
-    return result;
-};
-
-export default function CategoryCatalog() {
+export default function CategoryPage() {
     const router = useRouter();
     const { category } = router.query;
 
-    // 1) Если нет category или оно не string — вернём пустую строку (или можем сделать redirect / 404).
-    if (typeof category !== 'string') {
-        return null;
-    }
+    // Состояния
+    const [selectedCategory, setSelectedCategory] = useState<string>('Каталог');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 12;
+    const totalItems = 48;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-    // 2) Ищем в массиве категорий ту, которая транслитерируется так же, как строка из URL
-    const originalCategory = allCategories.find(
-        (cat) => transliterate(cat) === category
-    );
+    const [loadedProducts, setLoadedProducts] = useState<Product[]>(productsData.slice(0, itemsPerPage));
 
-    // Если не нашли совпадения, можно либо отобразить 404, либо просто показать category
-    // Для демонстрации: если не нашли, пускай будет "Неизвестная категория"
-    const displayCategory = originalCategory ?? 'Неизвестная категория';
+    const [filtersVisible, setFiltersVisible] = useState(false);
+    const prices = productsData.map((p) => p.price);
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    const [priceRange, setPriceRange] = useState<[number, number]>([minPrice, maxPrice]);
 
-    // Перемещаем выбранную категорию в начало списка
-    const updatedCategories = allCategories.includes(displayCategory)
-        ? [displayCategory, ...allCategories.filter((cat) => cat !== displayCategory)]
-        : allCategories;
+    const [selectedColors, setSelectedColors] = useState<string[]>([]);
+    const [selectedSizes, setSelectedSizes] = useState<number[]>([]);
+    const [currentSort, setCurrentSort] = useState<string>('default');
 
-    const breadcrumbs = displayCategory === 'Каталог'
-        ? [
-            { label: 'Главная', href: '/' },
-            { label: 'Каталог', href: '/catalog' },
-        ]
-        : [
-            { label: 'Главная', href: '/' },
-            { label: 'Каталог', href: '/catalog' },
-            { label: displayCategory, href: '' },
-        ];
+    // Хлебные крошки
+    const breadcrumbs: BreadcrumbItem[] =
+        selectedCategory === 'Каталог'
+            ? [
+                { label: 'Главная', href: '/' },
+                { label: 'Каталог', href: '/catalog' },
+            ]
+            : [
+                { label: 'Главная', href: '/' },
+                { label: 'Каталог', href: '/catalog' },
+                { label: selectedCategory, href: '' },
+            ];
+
+    // Обработчик клика по категории
+    const handleCategoryClick = (cat: string) => {
+        setSelectedCategory(cat);
+        const slug = transliterate(cat);
+        router.push(`/catalog/${slug}`);
+    };
+
+    // Обработчики фильтров
+    const toggleFilters = () => {
+        setFiltersVisible(!filtersVisible);
+    };
+
+    const handleResetFilters = () => {
+        setPriceRange([minPrice, maxPrice]);
+        setSelectedColors([]);
+        setSelectedSizes([]);
+    };
+
+    const handlePriceRangeChange = (range: [number, number]) => {
+        setPriceRange(range);
+    };
+
+    const handleColorChange = (color: string) => {
+        setSelectedColors((prev) =>
+            prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
+        );
+    };
+
+    const handleResetColors = () => {
+        setSelectedColors([]);
+    };
+
+    const handleSizeChange = (size: number) => {
+        setSelectedSizes((prev) =>
+            prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
+        );
+    };
+
+    const handleResetSizes = () => {
+        setSelectedSizes([]);
+    };
+
+    // Обработчик сортировки
+    const handleSortChange = (value: string) => {
+        setCurrentSort(value);
+    };
+
+    // Пагинация и загрузка товаров
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
+    const handleLoadMore = () => {
+        const nextPage = currentPage + 1;
+        const newProducts = productsData.slice(
+            nextPage * itemsPerPage,
+            (nextPage + 1) * itemsPerPage
+        );
+        setLoadedProducts((prev) => [...prev, ...newProducts]);
+        setCurrentPage(nextPage);
+    };
+
+    // Отключение скролла при отображении фильтров
+    useEffect(() => {
+        document.body.style.overflow = filtersVisible ? 'hidden' : '';
+    }, [filtersVisible]);
 
     return (
         <>
             <Head>
-                <title>{displayCategory} | MyCoats</title>
-                <meta name="description" content={`Товары категории ${displayCategory}`} />
+                <title>{selectedCategory} | MyCoats</title>
+                <meta name="description" content={`Каталог ${selectedCategory}`} />
             </Head>
+
             <PageLayout>
-                <div className={styles.breadcrumbContainer}>
-                    <nav className={styles.breadcrumbs}>
-                        <Link href="/catalog" className={styles.backButton}>
-                            Назад
-                        </Link>
-                        <span className={styles.breadcrumbsSeparator}>|</span>
-
-                        {breadcrumbs.map((crumb, idx) => {
-                            const isLast = idx === breadcrumbs.length - 1;
-                            return (
-                                <span key={idx} className={styles.crumbItem}>
-                                    {isLast ? (
-                                        <span className={styles.currentCrumb}>{crumb.label}</span>
-                                    ) : (
-                                        <>
-                                            <Link href={crumb.href} className={styles.breadcrumbLink}>
-                                                {crumb.label}
-                                            </Link>
-                                            <span className={styles.crumbSeparator}> &gt; </span>
-                                        </>
-                                    )}
-                                </span>
-                            );
-                        })}
-                    </nav>
-                </div>
-
                 <section className={styles.catalog}>
-                    <h1>Каталог женской одежды</h1>
-                    <div className={styles.categories}>
-                        {updatedCategories.map((cat) => (
-                            <Link key={cat} href={`/catalog/${transliterate(cat)}`}>
-                                <button
-                                    className={`${styles.categoryButton} ${cat === displayCategory ? styles.active : ''}`}
-                                >
-                                    {cat}
-                                </button>
-                            </Link>
-                        ))}
-                    </div>
+                    <Breadcrumbs items={breadcrumbs} />
+                    <h1>{selectedCategory}</h1>
 
-                    <div className={styles.catalogGrid}>
-                        {products.map((product) => (
-                            <ProductCard
-                                key={product.id}
-                                id={product.id}
-                                title={product.title}
-                                price={product.price}
-                                images={product.images}
-                                availableSizes={product.availableSizes}
-                            />
-                        ))}
-                    </div>
+                    <CategoryList
+                        categories={allCategories}
+                        selectedCategory={selectedCategory}
+                        onCategoryClick={handleCategoryClick}
+                    />
+
+                    <section className={styles.ButtonsSortWrapper}>
+                        <FiltersPanel
+                            onReset={handleResetFilters}
+                            priceRange={priceRange}
+                            onPriceRangeChange={handlePriceRangeChange}
+                            minPrice={minPrice}
+                            maxPrice={maxPrice}
+                            selectedColors={selectedColors}
+                            onColorChange={handleColorChange}
+                            onResetColors={handleResetColors}
+                            selectedSizes={selectedSizes}
+                            onSizeChange={handleSizeChange}
+                            onResetSizes={handleResetSizes}
+                            loadedProductsCount={loadedProducts.length}
+                            toggleFilters={toggleFilters}
+                        />
+
+                        <SortDropdown
+                            sortOptions={sortOptions}
+                            currentSort={currentSort}
+                            onSortChange={handleSortChange}
+                        />
+                    </section>
+
+                    <ProductGrid products={loadedProducts} />
+
+                    <Pagination
+                        loadedProductsCount={loadedProducts.length}
+                        totalItems={totalItems}
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                        onLoadMore={handleLoadMore}
+                    />
                 </section>
             </PageLayout>
         </>

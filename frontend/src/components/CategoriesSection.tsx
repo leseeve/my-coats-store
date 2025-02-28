@@ -6,9 +6,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from '@/styles/CategoriesSection.module.scss';
 
-// Регистрируем модуль навигации
-SwiperCore.use([Navigation]);
-
 const categories = [
     { id: 1, image: '/images/coat1.jpg', title: 'Пальто' },
     { id: 2, image: '/images/coat2.jpg', title: 'Платья' },
@@ -23,6 +20,9 @@ const categories = [
 ];
 
 const CategoriesSection: React.FC = () => {
+    // Регистрируем SwiperCore внутри компонента
+    SwiperCore.use([Navigation]);
+
     return (
         <section id="categories" className={styles.categoriesSection}>
             <div className={styles.swiperContainer}>
@@ -45,12 +45,12 @@ const CategoriesSection: React.FC = () => {
                                     <Image
                                         src={cat.image}
                                         alt="Категория"
-                                        width={450}
-                                        height={600}
+                                        width={360}
+                                        height={480}
                                         className={styles.catImage}
                                     />
                                 </Link>
-                                {/* Ссылка для подписи, которая теперь находится под изображением */}
+                                {/* Ссылка для подписи */}
                                 <Link href="#" className={styles.catCaptionLink}>
                                     <div className={styles.catCaption}>
                                         <div className={styles.catTitle}>{cat.title}</div>

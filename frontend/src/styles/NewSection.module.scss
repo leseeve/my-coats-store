@@ -1,6 +1,7 @@
 .newSection {
-    padding: 30px 20px;
+    padding: 30px 0 0 0;
     width: 100%;
+    min-width: 380px;
     font-family: var(--font-montserrat), sans-serif;
 }
 
@@ -9,12 +10,18 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    padding: 0 40px;
+
+    h2 {
+        font-size: 24px;
+    }
+
 }
 
 .seeAll {
     text-decoration: none;
     color: #000;
-    font-size: 1em;
+    font-size: 18px;
 }
 
 .swiperContainer {
@@ -28,7 +35,7 @@
 .swiperSlide {
     flex-shrink: 0;
     width: auto;
-    max-width: 450px;
+    max-width: 360px;
     display: flex;
     flex-direction: column;
     /* для вертикального расположения изображения и подписей */
@@ -36,7 +43,7 @@
 }
 
 .newCard {
-    width: 450px;
+    width: 360px;
     background-color: #fff;
     overflow: hidden;
     display: flex;
@@ -46,16 +53,13 @@
 .newImage {
     width: 100%;
     height: auto;
-    /* либо можно задать фиксированную высоту, если нужно */
     object-fit: cover;
 }
 
 /* Новый блок для подписей под карточкой */
 .cardCaptions {
     padding: 10px 20px;
-    /* опционально, для выделения блока */
     text-align: left;
-    /* выравнивание текста по левому краю */
 }
 
 /* Дополнительный класс для стилей ссылки на блок с подписями */
@@ -66,14 +70,15 @@
 }
 
 .newTitle {
-    font-size: 1.3em;
+    font-size: 13px;
+    text-transform: uppercase;
     font-weight: 500;
     margin: 0 0 5px 0;
 }
 
 .newPrice {
     margin: 0;
-    font-size: 1.1em;
+    font-size: 14px;
     color: #000;
 }
 
@@ -98,7 +103,10 @@
 }
 
 @media (max-width: 480px) {
+
     .newTop {
+        padding: 0 20px;
+
         h2 {
             font-size: 20px;
         }

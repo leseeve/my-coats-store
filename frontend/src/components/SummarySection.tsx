@@ -5,11 +5,14 @@ import styles from '@/styles/SummarySection.module.scss';
 const SummarySection = () => {
     const { items, total } = useCart();
 
+    // Инициализируем хук useState вне условного блока
+    const [promoCode, setPromoCode] = useState('');
+
+    // Проверяем, есть ли товары в корзине
     if (!items || total === undefined) {
         return <p>Корзина пуста.</p>;
     }
 
-    const [promoCode, setPromoCode] = useState('');
     const shippingCost = total >= 10000 ? 0 : 300;
     const finalPrice = total + shippingCost;
 
@@ -52,7 +55,6 @@ const SummarySection = () => {
             <button className={styles.checkoutButton} onClick={handleCheckout}>
                 Оплатить
             </button>
-
         </section>
     );
 };

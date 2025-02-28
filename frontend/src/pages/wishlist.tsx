@@ -1,9 +1,9 @@
-// src/pages/wishlist.tsx
 import React from 'react';
 import Head from 'next/head';
 import AccountLayout from '@/components/AccountLayout';
 import { ProductCard } from '@/components/ProductCard';
 import styles from '@/styles/Wishlist.module.scss';
+import Link from 'next/link';
 
 const products = [
     {
@@ -61,19 +61,27 @@ const Wishlist: React.FC = () => {
             </Head>
             <AccountLayout>
                 <div className={styles.wishlist}>
-                    <h1>Избранное</h1>
-                    <div className={styles.productsGrid}>
-                        {products.map((p) => (
-                            <ProductCard
-                                key={p.id}
-                                id={p.id}
-                                title={p.title}
-                                price={p.price}
-                                images={p.images}
-                                availableSizes={p.availableSizes}
-                            />
-                        ))}
-                    </div>
+                    {products.length > 0 ? (
+                        <>
+                            <h1>Избранное</h1>
+                            <div className={styles.productsGrid}>
+                                {products.map((p) => (
+                                    <ProductCard
+                                        key={p.id}
+                                        id={p.id}
+                                        title={p.title}
+                                        price={p.price}
+                                        images={p.images}
+                                        availableSizes={p.availableSizes}
+                                    />
+                                ))}
+                            </div>
+                        </>
+                    ) : (
+                        <div className={styles.emptyWishlist}>
+                            <p>Избранное пусто</p>
+                        </div>
+                    )}
                 </div>
             </AccountLayout>
         </>

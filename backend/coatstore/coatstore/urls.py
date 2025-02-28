@@ -3,6 +3,8 @@ from django.urls import path, include
 from django.http import HttpResponse
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from products.views import ProductBreadcrumbsView
+
 
 # Простая функция-представление для корневого URL
 def home_view(request):
@@ -36,4 +38,10 @@ urlpatterns = [
     
     # Документация API (ReDoc)
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+
+    # Эндпоинт для хлебных крошек
+    path('api/product/<int:pk>/breadcrumbs/', ProductBreadcrumbsView.as_view(), name='product-breadcrumbs'),
+
 ]
+
+

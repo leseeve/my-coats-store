@@ -20,7 +20,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
 from django.utils import timezone
 
-# Фильтрация продуктов с поддержкой категории, цветов, поиска по sku и имени
+# Фильтрация продуктов с поддержкой категории, цветов, поиска по sku, имени, описанию и размеров
 class ProductFilter(filters.FilterSet):
     min_price = filters.NumberFilter(field_name="price", lookup_expr='gte')
     max_price = filters.NumberFilter(field_name="price", lookup_expr='lte')
@@ -30,14 +30,18 @@ class ProductFilter(filters.FilterSet):
     colors = filters.ModelMultipleChoiceFilter(
         field_name="colors", queryset=Color.objects.all()
     )
+    sizes = filters.ModelMultipleChoiceFilter(
+        field_name="sizes", queryset=Size.objects.all()
+    )
+    description = filters.CharFilter(field_name="description", lookup_expr='icontains')
     
     class Meta:
         model = Product
-        fields = ['min_price', 'max_price', 'name', 'sku', 'category', 'colors']
+        fields = ['min_price', 'max_price', 'name', 'sku', 'category', 'colors', 'sizes', 'description']
 
 # Список продуктов с сортировкой (по умолчанию по цене по возрастанию)
 class ProductListView(generics.ListAPIView):
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().select_related('category').prefetch_related('sizes', 'colors')
     serializer_class = ProductSerializer
     permission_classes = [permissions.AllowAny]
     filter_backends = [DjangoFilterBackend, OrderingFilter]
@@ -70,9 +74,9 @@ class SimilarProductsView(APIView):
         except Product.DoesNotExist:
             return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
         if product.category:
-            similar = Product.objects.filter(category=product.category).exclude(id=product.id)
+            similar = Product.objects.filter(category=product.category).exclude(id=product.id).select_related('category').prefetch_related('sizes', 'colors')
         else:
-            similar = Product.objects.exclude(id=product.id)
+            similar = Product.objects.exclude(id=product.id).select_related('category').prefetch_related('sizes', 'colors')
         serializer = ProductSerializer(similar, many=True)
         return Response(serializer.data)
 
@@ -101,7 +105,7 @@ class RecentlyViewedListView(generics.ListAPIView):
     def get_queryset(self):
         recent = RecentlyViewed.objects.filter(user=self.request.user)
         product_ids = recent.values_list('product__id', flat=True)
-        return Product.objects.filter(id__in=product_ids)
+        return Product.objects.filter(id__in=product_ids).select_related('category').prefetch_related('sizes', 'colors')
 
 # Заказы: для не-администраторов возвращаются только заказы текущего пользователя
 class OrderListView(generics.ListAPIView):
@@ -111,11 +115,11 @@ class OrderListView(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         if user.is_staff:
-            return Order.objects.all()
-        return Order.objects.filter(customer=user)
+            return Order.objects.all().prefetch_related('items__product__category', 'items__product__sizes', 'items__product__colors')
+        return Order.objects.filter(customer=user).prefetch_related('items__product__category', 'items__product__sizes', 'items__product__colors')
 
 class OrderDetailView(generics.RetrieveAPIView):
-    queryset = Order.objects.all()
+    queryset = Order.objects.all().prefetch_related('items__product__category', 'items__product__sizes', 'items__product__colors')
     serializer_class = OrderSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -168,13 +172,19 @@ class ProfileUpdateView(APIView):
 class CartView(APIView):
     def get(self, request):
         if request.user.is_authenticated:
-            cart, created = Cart.objects.get_or_create(user=request.user)
+            try:
+                cart = Cart.objects.prefetch_related('items__product__category', 'items__product__sizes', 'items__product__colors').get(user=request.user)
+            except Cart.DoesNotExist:
+                cart = Cart.objects.create(user=request.user)
         else:
             session_key = request.session.session_key
             if not session_key:
                 request.session.create()
                 session_key = request.session.session_key
-            cart, created = Cart.objects.get_or_create(session_key=session_key)
+            try:
+                cart = Cart.objects.prefetch_related('items__product__category', 'items__product__sizes', 'items__product__colors').get(session_key=session_key)
+            except Cart.DoesNotExist:
+                cart = Cart.objects.create(session_key=session_key)
         serializer = CartSerializer(cart)
         return Response(serializer.data)
 
@@ -304,7 +314,7 @@ class FavoriteListView(generics.ListAPIView):
     def get_queryset(self):
         favorites = Favorite.objects.filter(user=self.request.user)
         product_ids = favorites.values_list('product__id', flat=True)
-        return Product.objects.filter(id__in=product_ids)
+        return Product.objects.filter(id__in=product_ids).select_related('category').prefetch_related('sizes', 'colors')
 
 # Эндпоинт для SEO информации и Яндекс Метрики
 class SEOInfoView(APIView):
@@ -319,3 +329,31 @@ class SEOInfoView(APIView):
             }
         }
         return Response(seo_info)
+
+# Эндпоинт для получения хлебных крошек для товара
+class ProductBreadcrumbsView(APIView):
+    permission_classes = [permissions.AllowAny]
+    
+    def get(self, request, pk):
+        try:
+            product = Product.objects.get(id=pk)
+        except Product.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Создаем хлебные крошки
+        breadcrumbs = [{'label': 'Главная', 'href': '/'}]
+        
+        # Добавляем категории
+        category = product.category
+        category_chain = []
+        while category:
+            category_chain.append({'label': category.name, 'href': f'/category/{category.id}'})
+            category = category.parent
+        
+        # Добавляем категории в хлебные крошки в обратном порядке
+        breadcrumbs.extend(reversed(category_chain))
+        
+        # Добавляем сам товар
+        breadcrumbs.append({'label': product.name, 'href': f'/product/{product.id}'})
+        
+        return Response(breadcrumbs)

@@ -1,11 +1,9 @@
-// src/pages/orders.tsx
 import React from 'react';
 import Head from 'next/head';
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import AccountLayout from '@/components/AccountLayout';
 import styles from '@/styles/Orders.module.scss';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Order {
     id: string;
@@ -46,28 +44,42 @@ const Orders: React.FC = () => {
             </Head>
             <AccountLayout>
                 <div className={styles.orders}>
-                    <h1>Мои заказы</h1>
-                    <div className={styles.ordersList}>
-                        {orders.map((order) => (
-                            <Link key={order.id} href={`/order/${order.id}`} className={styles.orderCard}>
-                                <div className={styles.orderHeader}>
-                                    <span className={styles.orderStatus}>{order.status}</span>
-                                    <span className={styles.orderId}>{order.id}</span>
-                                    <span className={styles.orderDate}>{order.date}</span>
-                                </div>
-                                <div className={styles.orderProducts}>
-                                    {order.products.map((product) => (
-                                        <div key={product.id} className={styles.productImage}>
-                                            <img src={product.image} alt={`product-${product.id}`} />
+                    {orders.length > 0 ? (
+                        <>
+                            <h1>Мои заказы</h1>
+                            <div className={styles.ordersList}>
+                                {orders.map((order) => (
+                                    <Link key={order.id} href={`/order/${order.id}`} className={styles.orderCard}>
+                                        <div className={styles.orderHeader}>
+                                            <span className={styles.orderStatus}>{order.status}</span>
+                                            <span className={styles.orderId}>{order.id}</span>
+                                            <span className={styles.orderDate}>{order.date}</span>
                                         </div>
-                                    ))}
-                                </div>
-                                <div className={styles.orderTotal}>
-                                    <span className={styles.totalPrice}>{order.total.toLocaleString()} ₽</span>
-                                </div>
-                            </Link>
-                        ))}
-                    </div>
+                                        <div className={styles.orderProducts}>
+                                            {order.products.map((product) => (
+                                                <div key={product.id} className={styles.productImage}>
+                                                    <Image
+                                                        src={product.image}
+                                                        alt={`product-${product.id}`}
+                                                        width={60}
+                                                        height={80}
+                                                        objectFit="cover"
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className={styles.orderTotal}>
+                                            <span className={styles.totalPrice}>{order.total.toLocaleString()} ₽</span>
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        </>
+                    ) : (
+                        <div className={styles.emptyOrders}>
+                            <p>Мои заказы</p>
+                        </div>
+                    )}
                 </div>
             </AccountLayout>
         </>

@@ -1,0 +1,101 @@
+.productImages {
+    display: flex;
+    gap: 20px;
+
+    .thumbsContainer {
+        width: 90px;
+        height: 600px;
+
+        .thumbsSwiper {
+            height: 100%;
+            width: 100%;
+
+            .swiper-slide {
+                cursor: pointer;
+                opacity: 0.6;
+                transition: opacity 0.3s;
+
+                &.swiper-slide-thumb-active {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    .mainContainer {
+        position: relative;
+        width: 600px;
+        height: 800px;
+
+        .mainSwiper {
+            width: 100%;
+            height: 100%;
+
+            .swiper-slide {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+
+        .swiperButton {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            // background-color: rgba(0, 0, 0, 0.5);
+            color: black;
+            display: none;
+            z-index: 10;
+            cursor: pointer;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.7);
+            }
+        }
+
+        .swiperButtonPrev {
+            left: 10px;
+        }
+
+        .swiperButtonNext {
+            right: 10px;
+        }
+
+        &:hover {
+            .swiperButton {
+                display: block;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        flex-direction: column;
+
+        .thumbsContainer {
+            width: 100%;
+            height: auto;
+            order: 2;
+
+            .thumbsSwiper {
+                direction: horizontal;
+                height: 100px;
+
+                .swiper-slide {
+                    width: 100px;
+                    height: 100px;
+                }
+            }
+        }
+
+        .mainContainer {
+            width: 100%;
+            height: auto;
+
+            .swiperButton {
+                display: none !important;
+            }
+        }
+    }
+}

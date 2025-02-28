@@ -16,13 +16,17 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({ children }) => {
         setSidebarOpen((prev) => !prev);
     };
 
+    const closeSidebar = () => {
+        setSidebarOpen(false);
+    };
+
     return (
         <div className={styles.pageWrapper}>
             <div className={styles.accountLayout}>
                 <Header />
                 <div className={styles.mainContentWrapper}>
                     <div className={`${styles.sidebarWrapper} ${sidebarOpen ? styles.open : ''}`}>
-                        <SidebarAccount />
+                        <SidebarAccount closeSidebar={closeSidebar} />
                     </div>
                     <div className={`${styles.contentWrapper} ${sidebarOpen ? styles.hidden : ''}`}>
                         <button className={styles.sidebarToggle} onClick={toggleSidebar}>

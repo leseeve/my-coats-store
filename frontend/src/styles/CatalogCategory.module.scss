@@ -1,0 +1,59 @@
+.catalog {
+    padding: 5px 20px 20px 20px;
+    max-width: 1440px;
+    margin: 0 auto;
+    font-family: var(--font-montserrat), sans-serif;
+
+    h1 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+    }
+}
+
+.ButtonsSortWrapper {
+    display: flex;
+    gap: 30px;
+    padding-bottom: 10px;
+}
+
+.catalogGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.categoryList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.categoryButton {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.categoryButton:hover {
+    background-color: #e0e0e0;
+}
+
+.active {
+    font-weight: bold;
+    background-color: #ccc;
+}
+
+.ButtonsSortWrapper {
+    display: flex;
+    gap: 20px;
+}
+
+.ProductGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}

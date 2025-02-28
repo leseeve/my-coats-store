@@ -1,5 +1,5 @@
 .categoriesSection {
-    padding: 30px 20px;
+    padding: 30px 0 0 0;
     width: 100%;
 }
 
@@ -14,7 +14,7 @@
 .swiperSlide {
     flex-shrink: 0;
     width: auto;
-    max-width: 450px;
+    max-width: 360px;
     display: flex;
     flex-direction: column;
     /* для вертикального расположения изображения и подписи */
@@ -22,7 +22,7 @@
 }
 
 .categoryCard {
-    width: 450px;
+    width: 360px;
     background-color: #fff;
     overflow: hidden;
     display: flex;
@@ -31,21 +31,20 @@
 
 .catImage {
     width: 100%;
-    height: 600px;
+    height: 480px;
     object-fit: cover;
 }
 
 /* Новый блок для подписи под изображением */
 .catCaption {
     padding: 10px 20px;
-    /* можно изменить или убрать фон */
-    text-align: center;
+    text-align: left;
 }
 
 /* Стили для текста подписи */
 .catTitle {
-    font-size: 1.3em;
-    font-weight: 500;
+    font-size: 13px;
+    text-transform: uppercase;
     margin: 0 0 5px 0;
 }
 
@@ -81,6 +80,6 @@
     }
 
     .catImage {
-        height: 400px;
+        height: 360px;
     }
 }

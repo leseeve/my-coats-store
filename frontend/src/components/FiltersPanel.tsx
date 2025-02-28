@@ -18,6 +18,7 @@ interface FiltersPanelProps {
     onSizeChange: (size: number) => void;
     onResetSizes: () => void;
     loadedProductsCount: number;
+    toggleFilters: () => void; // Добавлен проп toggleFilters
 }
 
 export const FiltersPanel: React.FC<FiltersPanelProps> = ({

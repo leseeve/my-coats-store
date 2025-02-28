@@ -1,4 +1,3 @@
-// src/components/ProductCard.tsx
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,9 +7,6 @@ import SwiperCore from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import styles from '@/styles/ProductCard.module.scss';
-
-// Регистрируем модуль навигации
-SwiperCore.use([Navigation]);
 
 interface ProductCardProps {
   id: number | string;
@@ -28,6 +24,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   availableSizes,
 }) => {
   const [favorite, setFavorite] = useState(false);
+
+  // Регистрируем SwiperCore непосредственно в теле компонента
+  SwiperCore.use([Navigation]);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -90,7 +89,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
       </Link>
 
-      {/* Кнопка "Избранное" – вне ссылок, чтобы onClick срабатывал корректно */}
+      {/* Кнопка "Избранное" */}
       <button className={styles.favButton} onClick={handleFavoriteClick}>
         {favorite ? (
           <svg viewBox="0 0 24 24" fill="#000">
@@ -109,7 +108,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         )}
       </button>
 
-      {/* Область с информацией о товаре – кликабельная */}
+      {/* Область с информацией о товаре */}
       <Link href={`/product/${id}`} className={styles.clickableArea}>
         <div className={styles.info}>
           <h3 className={styles.title}>{title}</h3>
@@ -119,5 +118,3 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     </div>
   );
 };
-
-

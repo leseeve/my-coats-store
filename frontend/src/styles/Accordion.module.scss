@@ -1,0 +1,36 @@
+.accordion {
+    // max-width: 1440px;
+    // margin: 20px auto;
+    padding: 20px 0;
+
+    .accordionItem {
+        border-bottom: 1px solid #ccc;
+
+        .accordionButton {
+            background: none;
+            border: none;
+            width: 100%;
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+
+            .arrowIcon {
+                transition: transform 0.3s ease;
+            }
+
+            .open {
+                transform: rotate(180deg);
+            }
+        }
+
+        .accordionContent {
+            padding: 10px 0;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+    }
+}

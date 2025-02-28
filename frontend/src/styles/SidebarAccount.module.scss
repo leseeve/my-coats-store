@@ -5,7 +5,6 @@
     padding: 65px 20px 80px 20px;
     display: flex;
     justify-content: center;
-    // align-items: center;
     height: 100%;
 }
 
@@ -75,6 +74,7 @@
 
 /* Desktop (min-width: 769px) */
 @media (min-width: 769px) {
+
     .primaryNavLink {
         font-size: 1.5em;
     }
@@ -112,6 +112,16 @@
 /* Mobile (max-width: 768px) */
 @media (max-width: 768px) {
 
+    .sidebar {
+        padding: 10px 20px 80px 20px;
+        align-items: center;
+
+    }
+
+    .linkText {
+        text-align: left;
+    }
+
     .primaryNavLink,
     .secondaryNavLink {
         font-size: 1.2em;
@@ -124,6 +134,6 @@
         border-top: 6px solid transparent;
         border-bottom: 6px solid transparent;
         border-left: 6px solid black;
-        margin-left: 10px;
+        margin-right: 10px;
     }
 }

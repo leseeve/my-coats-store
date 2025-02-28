@@ -1,4 +1,3 @@
-// src/components/NewSection.tsx
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -6,9 +5,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import SwiperCore from 'swiper';
 import styles from '@/styles/NewSection.module.scss';
-
-// Регистрируем модуль навигации
-SwiperCore.use([Navigation]);
 
 const newProducts = [
     { id: 1, image: '/images/coat1.jpg', title: 'Объемные серьги-кольца', price: '1 299 ₽' },
@@ -18,6 +14,8 @@ const newProducts = [
 ];
 
 const NewSection: React.FC = () => {
+    SwiperCore.use([Navigation]);
+
     return (
         <section className={styles.newSection}>
             <div className={styles.newTop}>
@@ -68,4 +66,3 @@ const NewSection: React.FC = () => {
 };
 
 export default NewSection;
-

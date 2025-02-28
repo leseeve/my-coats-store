@@ -10,6 +10,18 @@
         grid-gap: 10px;
         grid-template-columns: repeat(4, 1fr);
     }
+
+    /* Стиль для пустого избранного */
+    .emptyWishlist {
+        display: flex;
+        text-align: center;
+    }
+
+    .emptyWishlist p {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
 }
 
 @media (max-width: 1280px) {

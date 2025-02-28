@@ -24,127 +24,7 @@ const productsData: Product[] = [
       { size: 44, available: true },
     ],
   },
-  {
-    id: 2,
-    title: 'Куртка',
-    price: 3000,
-    images: ['/images/coat2.jpg', '/images/coat2_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 3,
-    title: 'Пальто',
-    price: 9000,
-    images: ['/images/coat3.jpg', '/images/coat3_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 4,
-    title: 'Плащ',
-    price: 12000,
-    images: ['/images/coat4.jpg', '/images/coat4_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 1,
-    title: 'Жилет',
-    price: 1000,
-    images: ['/images/coat1.jpg', '/images/coat1_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 2,
-    title: 'Куртка',
-    price: 3000,
-    images: ['/images/coat2.jpg', '/images/coat2_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 3,
-    title: 'Пальто',
-    price: 9000,
-    images: ['/images/coat3.jpg', '/images/coat3_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 4,
-    title: 'Плащ',
-    price: 12000,
-    images: ['/images/coat4.jpg', '/images/coat4_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 1,
-    title: 'Жилет',
-    price: 1000,
-    images: ['/images/coat1.jpg', '/images/coat1_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 2,
-    title: 'Куртка',
-    price: 3000,
-    images: ['/images/coat2.jpg', '/images/coat2_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 3,
-    title: 'Пальто',
-    price: 9000,
-    images: ['/images/coat3.jpg', '/images/coat3_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
-  {
-    id: 4,
-    title: 'Плащ',
-    price: 12000,
-    images: ['/images/coat4.jpg', '/images/coat4_2.jpg'],
-    availableSizes: [
-      { size: 40, available: true },
-      { size: 42, available: false },
-      { size: 44, available: true },
-    ],
-  },
+  // другие товары...
 ];
 
 const allCategories = [
@@ -178,9 +58,7 @@ export default function Catalog() {
   const totalItems = 48;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  const [loadedProducts, setLoadedProducts] = useState<Product[]>(
-    productsData.slice(0, itemsPerPage)
-  );
+  const [loadedProducts, setLoadedProducts] = useState<Product[]>(productsData.slice(0, itemsPerPage));
 
   const [filtersVisible, setFiltersVisible] = useState(false);
   const prices = productsData.map((p) => p.price);
@@ -214,7 +92,7 @@ export default function Catalog() {
 
   // Обработчики фильтров
   const toggleFilters = () => {
-    setFiltersVisible(!filtersVisible);
+    setFiltersVisible(!filtersVisible); // Используем toggleFilters для изменения состояния видимости фильтров
   };
 
   const handleResetFilters = () => {
@@ -280,7 +158,6 @@ export default function Catalog() {
       </Head>
 
       <PageLayout>
-        {/* Обёртка основного контента с применением стилей каталога */}
         <section className={styles.catalog}>
           <Breadcrumbs items={breadcrumbs} />
 
@@ -306,6 +183,7 @@ export default function Catalog() {
               onSizeChange={handleSizeChange}
               onResetSizes={handleResetSizes}
               loadedProductsCount={loadedProducts.length}
+              toggleFilters={toggleFilters} // Теперь передаем toggleFilters как пропс
             />
 
             <SortDropdown
@@ -330,4 +208,3 @@ export default function Catalog() {
     </>
   );
 }
-

@@ -4,31 +4,35 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styles from '@/styles/SidebarAccount.module.scss';
 
-interface NavItem {
-    label: string;
-    href: string;
+interface SidebarAccountProps {
+    closeSidebar: () => void;
 }
 
-const primaryNavItems: NavItem[] = [
+const primaryNavItems = [
     { label: 'МОЙ ПРОФИЛЬ', href: '/profile' },
     { label: 'ИЗБРАННОЕ', href: '/wishlist' },
     { label: 'МОИ ЗАКАЗЫ', href: '/orders' },
 ];
 
-const secondaryNavItems: NavItem[] = [
+const secondaryNavItems = [
     { label: 'ДОСТАВКА И ВОЗВРАТ', href: '/shipping-and-return' },
     { label: 'УВЕДОМЛЕНИЯ', href: '/notifications' },
     { label: 'СЛУЖБА ПОДДЕРЖКИ', href: '/contacts' },
     { label: 'ВЫЙТИ', href: '/logout' },
 ];
 
-const SidebarAccount: React.FC = () => {
+const SidebarAccount: React.FC<SidebarAccountProps> = ({ closeSidebar }) => {
     const router = useRouter();
 
+    const handleLinkClick = (isActive: boolean) => {
+        if (isActive) {
+            closeSidebar();
+        }
+    };
+
     const handleLogout = () => {
-        // Здесь можно добавить логику очистки сессии/токенов, если необходимо
-        // Например: localStorage.removeItem('authToken');
-        router.push('/'); // Перенаправляем на главную страницу
+        router.push('/');
+        closeSidebar();
     };
 
     return (
@@ -42,6 +46,7 @@ const SidebarAccount: React.FC = () => {
                                 href={item.href}
                                 key={item.href}
                                 className={`${styles.primaryNavLink} ${isActive ? styles.active : ''}`}
+                                onClick={() => handleLinkClick(isActive)}
                             >
                                 <span className={styles.linkText}>{item.label}</span>
                                 <span className={styles.indicator}></span>
@@ -53,7 +58,6 @@ const SidebarAccount: React.FC = () => {
                     {secondaryNavItems.map((item) => {
                         const isActive = router.pathname === item.href;
                         if (item.label === 'ВЫЙТИ') {
-                            // Рендерим кнопку вместо ссылки для выхода
                             return (
                                 <button
                                     key={item.href}
@@ -70,6 +74,7 @@ const SidebarAccount: React.FC = () => {
                                 href={item.href}
                                 key={item.href}
                                 className={`${styles.secondaryNavLink} ${isActive ? styles.active : ''}`}
+                                onClick={() => handleLinkClick(isActive)}
                             >
                                 <span className={styles.linkText}>{item.label}</span>
                                 <span className={styles.indicator}></span>

@@ -8,6 +8,8 @@ interface DaDataSuggestion {
     data: {
         fias_id?: string;
         street_fias_id?: string;
+        city_with_type?: string;
+        settlement_with_type?: string;
         [key: string]: string | undefined; // Более конкретный тип вместо any
     };
 }
@@ -48,7 +50,15 @@ const DeliverySection = () => {
             });
             if (!resp.ok) throw new Error(`City error: ${resp.status}`);
             const data = await resp.json();
-            const arr = data.suggestions || [];
+
+            // Логирование полученных данных для дебага
+            console.log('City data:', data);
+
+            // Фильтруем только города и поселки, исключая улицы
+            const arr = data.suggestions.filter((sug: DaDataSuggestion) => {
+                // Фильтруем только города и поселки
+                return sug.data.city_with_type || sug.data.settlement_with_type;
+            }) || [];
             setCitySuggestions(arr);
             setShowCityDropdown(arr.length > 0);
         } catch (err) {
@@ -72,6 +82,10 @@ const DeliverySection = () => {
             });
             if (!resp.ok) throw new Error(`Street error: ${resp.status}`);
             const data = await resp.json();
+
+            // Логирование полученных данных для дебага
+            console.log('Street data:', data);
+
             const arr = data.suggestions || [];
             setStreetSuggestions(arr);
             setShowStreetDropdown(arr.length > 0);
@@ -269,31 +283,11 @@ const DeliverySection = () => {
                                         value={house}
                                         disabled={!street}
                                         onChange={handleHouseChange}
-                                        onFocus={() => {
-                                            if (houseSuggestions.length > 0) setShowHouseDropdown(true);
-                                        }}
                                     />
                                     {house && (
                                         <button className={styles.clearBtn} onClick={clearHouse}>
                                             ✖
                                         </button>
-                                    )}
-                                    {showHouseDropdown && houseSuggestions.length > 0 && (
-                                        <ul className={styles.dropdown}>
-                                            {houseSuggestions.map((hItem, idx2) => (
-                                                <li
-                                                    key={idx2}
-                                                    className={styles.dropdownOption}
-                                                    onClick={() => {
-                                                        setHouse(hItem.value);
-                                                        setHouseSuggestions([]);
-                                                        setShowHouseDropdown(false);
-                                                    }}
-                                                >
-                                                    {hItem.value}
-                                                </li>
-                                            ))}
-                                        </ul>
                                     )}
                                 </div>
                             </div>
@@ -359,8 +353,4 @@ const DeliverySection = () => {
 };
 
 export default DeliverySection;
-
-
-
-
 

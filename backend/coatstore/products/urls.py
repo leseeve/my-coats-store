@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
 from .views import (
     ProductListView,
     ProductCreateView,
@@ -25,12 +26,12 @@ from .views import (
 
 urlpatterns = [
     # Продукты
-    path('products/', ProductListView.as_view(), name='product-list'),
+    path('products/', cache_page(60 * 15)(ProductListView.as_view()), name='product-list'),
     path('products/create/', ProductCreateView.as_view(), name='product-create'),
     path('products/update/<int:pk>/', ProductUpdateView.as_view(), name='product-update'),
     path('products/<int:pk>/delete/', ProductDeleteView.as_view(), name='product-delete'),
     # Похожие товары
-    path('products/<int:pk>/similar/', SimilarProductsView.as_view(), name='similar-products'),
+    path('products/<int:pk>/similar/', cache_page(60 * 15)(SimilarProductsView.as_view()), name='similar-products'),
     # Запись просмотра товара
     path('products/record-view/', RecordProductView.as_view(), name='record-product-view'),
     # Недавно просмотренные товары

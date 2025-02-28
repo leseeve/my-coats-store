@@ -55,11 +55,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         });
     };
 
-    const removeItem = (id: string, removeAll?: boolean) => {
+    const removeItem = (id: string, removeAll: boolean = false) => {
         setItems((prev) => {
             if (removeAll) {
+                // Удаляем весь товар из корзины
                 return prev.filter((i) => i.id !== id);
             } else {
+                // Уменьшаем количество товара на 1 или удаляем товар, если количество = 1
                 const existingItem = prev.find((i) => i.id === id);
                 if (existingItem && existingItem.quantity > 1) {
                     return prev.map((i) =>
