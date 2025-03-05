@@ -11,6 +11,11 @@
         font-size: 24px;
         margin-bottom: 20px;
     }
+
+    p {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
 }
 
 .toggleGroup {
@@ -40,10 +45,12 @@
 }
 
 .saveButton {
+    width: 100%;
+    max-width: 440px;
     background-color: #000;
     color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 20px 20px;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;

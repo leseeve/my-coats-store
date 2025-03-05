@@ -1,14 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { RiCloseLargeFill } from 'react-icons/ri';  // Импортируем новую иконку
+import { RiCloseLargeFill } from 'react-icons/ri';  // Импорт новой иконки
 import { GoPerson, GoHeart, GoSearch } from 'react-icons/go';
 import { IoBagOutline } from 'react-icons/io5';
 import { RxHamburgerMenu } from 'react-icons/rx';
+import { useRouter } from 'next/router';
+import { transliterate } from '@/utils/transliterate';
 import styles from '@/styles/HeaderNew.module.scss';
 
 const HeaderNew: React.FC = () => {
     const [searchOpen, setSearchOpen] = useState(false);
     const [catalogOpen, setCatalogOpen] = useState(false);
+    const router = useRouter();
 
     const headerRef = useRef<HTMLElement>(null);
     const topBarRef = useRef<HTMLDivElement>(null);
@@ -34,14 +37,31 @@ const HeaderNew: React.FC = () => {
     const handleOpenSearch = () => setSearchOpen(true);
     const handleCloseSearch = () => setSearchOpen(false);
 
-    // Открытие/закрытие каталога
+    // Открытие/закрытие меню (каталога)
     const handleToggleCatalog = () => {
         setCatalogOpen((prev) => !prev);
     };
 
-    // Закрыть каталог (клик по оверлею/крестику)
+    // Закрыть меню (каталога)
     const handleCloseCatalog = () => {
         setCatalogOpen(false);
+    };
+
+    // Обработчик кнопки "Применить поиск"
+    const handleApplySearch = () => {
+        setSearchOpen(false);
+        router.push('/catalog');
+    };
+
+    // Переход на страницу выбранной категории
+    const handleCategoryClick = (category: string) => {
+        setCatalogOpen(false);
+        if (category === 'Каталог') {
+            router.push('/catalog');
+        } else {
+            const slug = transliterate(category);
+            router.push(`/catalog/${slug}`);
+        }
     };
 
     const handleScrollDown = () => {
@@ -53,7 +73,7 @@ const HeaderNew: React.FC = () => {
 
     return (
         <header ref={headerRef} className={styles.header}>
-            {/* Видео фоновая картинка */}
+            {/* Фоновое видео */}
             <div className={styles.videoContainer}>
                 <video src="/videos/uzori.mp4" autoPlay muted loop playsInline></video>
             </div>
@@ -67,27 +87,24 @@ const HeaderNew: React.FC = () => {
                         <div className={styles.burgerIcon} onClick={handleToggleCatalog}>
                             <RxHamburgerMenu />
                         </div>
-
-                        {/* Логотип для мобильных (скрыт на десктопе) */}
+                        {/* Мобильный логотип */}
                         <div className={styles.logoMobile}>
                             <Link href="/">UnholyPlace</Link>
                         </div>
                     </div>
-
                     {/* Центральная колонка (логотип для десктопа) */}
                     <div className={styles.center}>
                         <div className={styles.logo}>
                             <Link href="/">UnholyPlace</Link>
                         </div>
                     </div>
-
                     {/* Правая колонка (иконки) */}
                     <div className={styles.right}>
                         <div className={styles.iconLinks}>
                             <button onClick={handleOpenSearch}>
                                 <GoSearch />
                             </button>
-                            <Link href="/orders" className={styles.LinkIcon}>
+                            <Link href="/profile" className={styles.LinkIcon}>
                                 <GoPerson />
                             </Link>
                             <Link href="/wishlist" className={styles.LinkIcon}>
@@ -104,12 +121,18 @@ const HeaderNew: React.FC = () => {
             {/* Оверлей поиска */}
             {searchOpen && (
                 <div className={styles.searchOverlay} onClick={handleCloseSearch}>
-                    <div className={styles.searchContent} onClick={(e) => e.stopPropagation()}>
+                    <div
+                        className={styles.searchContent}
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <input
                             type="text"
                             placeholder="Поиск..."
                             className={styles.searchInput}
                         />
+                        <button className={styles.applySearchBtn} onClick={handleApplySearch}>
+                            Найти
+                        </button>
                         <button className={styles.closeBtn} onClick={handleCloseSearch}>
                             Закрыть
                         </button>
@@ -117,42 +140,39 @@ const HeaderNew: React.FC = () => {
                 </div>
             )}
 
-            {/* Боковая панель каталога */}
+            {/* Панель меню (каталога) */}
             <div
-                className={`${styles.sideNav} ${catalogOpen ? styles.sideNavOpen : ''}`}
-                onClick={(e) => e.stopPropagation()}
+                className={`${styles.filtersOverlay} ${catalogOpen ? styles.active : ''}`}
+                onClick={handleCloseCatalog}
             >
-                {/* Кнопка закрытия (крестик) */}
-                <button className={styles.closeNavBtn} onClick={handleCloseCatalog}>
-                    <RiCloseLargeFill size={25} />
-                </button>
-
-                <nav className={styles.sideNavContent}>
+                <div
+                    className={`${styles.filtersContainer} ${catalogOpen ? styles.active : ''}`}
+                >
+                    <div className={styles.filtersHeader}>
+                        <button onClick={handleCloseCatalog} className={styles.closeButton}>
+                            <RiCloseLargeFill />
+                        </button>
+                    </div>
                     <ul>
-                        <li className={styles.catalogTitle}>Каталог</li>
-                        <li>Пальто</li>
-                        <li>Платья</li>
-                        <li>Пиджаки</li>
-                        <li>Рубашки</li>
-                        <li>Блузы</li>
-                        <li>Юбки</li>
-                        <li>Брюки</li>
-                        <li>Жакеты</li>
-                        <li>Плащи</li>
-                        <li>Куртки</li>
+                        <li className={styles.catalogTitle} onClick={() => handleCategoryClick('Каталог')}>Каталог</li>
+                        <li onClick={() => handleCategoryClick('Пальто')}>Пальто</li>
+                        <li onClick={() => handleCategoryClick('Платья')}>Платья</li>
+                        <li onClick={() => handleCategoryClick('Пиджаки')}>Пиджаки</li>
+                        <li onClick={() => handleCategoryClick('Рубашки')}>Рубашки</li>
+                        <li onClick={() => handleCategoryClick('Блузы')}>Блузы</li>
+                        <li onClick={() => handleCategoryClick('Юбки')}>Юбки</li>
+                        <li onClick={() => handleCategoryClick('Брюки')}>Брюки</li>
+                        <li onClick={() => handleCategoryClick('Жакеты')}>Жакеты</li>
+                        <li onClick={() => handleCategoryClick('Плащи')}>Плащи</li>
+                        <li onClick={() => handleCategoryClick('Куртки')}>Куртки</li>
                     </ul>
                     <hr />
                     <ul>
                         <li>Доставка и Возврат</li>
                         <li>Служба Поддержки</li>
                     </ul>
-                </nav>
+                </div>
             </div>
-
-            {/* Полупрозрачный фон (overlay) */}
-            {catalogOpen && (
-                <div className={styles.fadeOverlay} onClick={handleCloseCatalog}></div>
-            )}
 
             {/* Кнопка прокрутки вниз */}
             <button className={styles.scrollDownBtn} onClick={handleScrollDown}>
