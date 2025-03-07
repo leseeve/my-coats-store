@@ -20,6 +20,11 @@
             border: 1px solid #ddd;
             font-size: 1em;
             height: 60px;
+
+            &:focus-visible {
+                outline: none;
+                border: 1px solid #666;
+            }
         }
 
         button {
@@ -56,6 +61,11 @@
                 border: 1px solid #ddd;
                 font-size: 1em;
                 height: 60px;
+
+                &:focus-visible {
+                    outline: none;
+                    border: 1px solid #666;
+                }
             }
         }
     }

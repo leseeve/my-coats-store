@@ -1,41 +1,52 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import styles from '@/styles/DeliverySection.module.scss';
 
-// Интерфейс для данных DaData
 interface DaDataSuggestion {
     value: string;
     data: {
-        fias_id?: string;
+        street_with_type?: string; // Улица с типом
         street_fias_id?: string;
-        city_with_type?: string;
-        settlement_with_type?: string;
-        [key: string]: string | undefined; // Более конкретный тип вместо any
+        city_fias_id?: string;
+        [key: string]: string | undefined;
     };
 }
 
 const DeliverySection = () => {
-    // Город
+    // Состояния для города
     const [city, setCity] = useState('');
     const [citySuggestions, setCitySuggestions] = useState<DaDataSuggestion[]>([]);
     const [showCityDropdown, setShowCityDropdown] = useState(false);
     const [cityFiasId, setCityFiasId] = useState('');
-    // Способ доставки
-    const [deliveryMethod, setDeliveryMethod] = useState<'courier' | 'pickup' | ''>('');
-    // Поля для курьера
+
+    // Состояния для улицы
     const [street, setStreet] = useState('');
     const [streetSuggestions, setStreetSuggestions] = useState<DaDataSuggestion[]>([]);
     const [showStreetDropdown, setShowStreetDropdown] = useState(false);
+
+    // Состояния для дома и квартиры
     const [house, setHouse] = useState('');
-    const [houseSuggestions, setHouseSuggestions] = useState<DaDataSuggestion[]>([]);
-    const [showHouseDropdown, setShowHouseDropdown] = useState(false);
     const [apartment, setApartment] = useState('');
-    // Debounce refs
+
+    // Способ доставки
+    const [deliveryMethod, setDeliveryMethod] = useState('');
     const cityTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const streetTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const houseTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Методы загрузки DaData (упрощённо)
+    // Ref для обёртки поля города (для клика вне)
+    const cityWrapperRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (cityWrapperRef.current && !cityWrapperRef.current.contains(e.target as Node)) {
+                setShowCityDropdown(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    // Загрузка городов
     const fetchCities = async (query: string) => {
         if (query.length < 2) {
             setCitySuggestions([]);
@@ -43,110 +54,113 @@ const DeliverySection = () => {
             return;
         }
         try {
-            const resp = await fetch('/api/utils/dadata', {
+            const response = await fetch('/api/utils/dadata', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query, count: 10 }),
+                body: JSON.stringify({
+                    query,
+                    count: 10,
+                    from_bound: { value: 'city' },
+                    to_bound: { value: 'city' },
+                }),
             });
-            if (!resp.ok) throw new Error(`City error: ${resp.status}`);
-            const data = await resp.json();
-
-            // Логирование полученных данных для дебага
-            console.log('City data:', data);
-
-            // Фильтруем только города и поселки, исключая улицы
-            const arr = data.suggestions.filter((sug: DaDataSuggestion) => {
-                // Фильтруем только города и поселки
-                return sug.data.city_with_type || sug.data.settlement_with_type;
-            }) || [];
-            setCitySuggestions(arr);
-            setShowCityDropdown(arr.length > 0);
-        } catch (err) {
-            console.error('City fetch error:', err);
+            if (!response.ok) throw new Error('Ошибка загрузки городов');
+            const data = await response.json();
+            // Фильтруем только города и поселки (без улиц)
+            const filtered = data.suggestions.filter((sug: DaDataSuggestion) =>
+                (sug.data.city_with_type || sug.data.settlement_with_type) && !sug.data.street
+            );
+            setCitySuggestions(filtered);
+            setShowCityDropdown(filtered.length > 0);
+        } catch (error) {
+            console.error('Ошибка получения городов:', error);
             setCitySuggestions([]);
-            setShowCityDropdown(false);
         }
     };
 
-    const fetchStreets = async (query: string, fiasId: string) => {
-        if (query.length < 2 || !fiasId) {
-            setStreetSuggestions([]);
-            setShowStreetDropdown(false);
-            return;
-        }
-        try {
-            const resp = await fetch('/api/utils/dadata', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query, count: 10, fias_id: fiasId }),
-            });
-            if (!resp.ok) throw new Error(`Street error: ${resp.status}`);
-            const data = await resp.json();
-
-            // Логирование полученных данных для дебага
-            console.log('Street data:', data);
-
-            const arr = data.suggestions || [];
-            setStreetSuggestions(arr);
-            setShowStreetDropdown(arr.length > 0);
-        } catch (err) {
-            console.error('Street fetch error:', err);
-            setStreetSuggestions([]);
-            setShowStreetDropdown(false);
-        }
-    };
-
-    // Handlers
     const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = e.target.value;
-        setCity(val);
+        const value = e.target.value;
+        setCity(value);
         setCityFiasId('');
+        // Сброс зависимых полей
         setStreet('');
         setHouse('');
         setApartment('');
         if (cityTimeoutRef.current) clearTimeout(cityTimeoutRef.current);
-        cityTimeoutRef.current = setTimeout(() => {
-            fetchCities(val);
-        }, 300);
+        cityTimeoutRef.current = setTimeout(() => fetchCities(value), 300);
     };
 
     const handleCitySelect = (item: DaDataSuggestion) => {
-        setCity(item.value);
-        setCitySuggestions([]);
+        // Выполняем замену, чтобы "г " стало "г. "
+        const replacedValue = item.value.replace(/(?:^|\s)(г)\s/gi, (match, g) => {
+            const prefix = match.startsWith(' ') ? ' ' : '';
+            return prefix + 'г. ';
+        });
+        setCity(replacedValue);
+        setCityFiasId(item.data.fias_id || '');
         setShowCityDropdown(false);
-        if (item.data.fias_id) setCityFiasId(item.data.fias_id);
-        setStreet('');
-        setHouse('');
-        setApartment('');
+        setCitySuggestions([]);
     };
 
     const clearCity = () => {
         setCity('');
+        setCityFiasId('');
         setCitySuggestions([]);
         setShowCityDropdown(false);
-        setCityFiasId('');
         setStreet('');
         setHouse('');
         setApartment('');
     };
 
+    // Загрузка улиц только для выбранного города
+    const fetchStreets = async (query: string) => {
+        if (!cityFiasId || query.length < 2) return;
+        try {
+            const response = await fetch('/api/utils/dadata', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    query,
+                    count: 10,
+                    locations: [{ fias_id: cityFiasId }],
+                    from_bound: { value: 'street' },
+                    to_bound: { value: 'street' },
+                }),
+            });
+            const data = await response.json();
+            // Фильтруем только улицы и формируем отображаемое значение
+            const filtered = data.suggestions
+                .filter((sug: DaDataSuggestion) => sug.data.street_with_type)
+                .map((sug: DaDataSuggestion) => ({
+                    ...sug,
+                    value: sug.data.street_with_type || '',
+                }));
+            setStreetSuggestions(filtered);
+            setShowStreetDropdown(filtered.length > 0);
+        } catch (error) {
+            console.error('Ошибка загрузки улиц:', error);
+            setStreetSuggestions([]);
+        }
+    };
+
     const handleStreetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = e.target.value;
-        setStreet(val);
+        const value = e.target.value;
+        setStreet(value);
         setHouse('');
         setApartment('');
         if (streetTimeoutRef.current) clearTimeout(streetTimeoutRef.current);
-        streetTimeoutRef.current = setTimeout(() => {
-            fetchStreets(val, cityFiasId);
-        }, 300);
+        streetTimeoutRef.current = setTimeout(() => fetchStreets(value), 300);
     };
 
     const handleStreetSelect = (item: DaDataSuggestion) => {
-        setStreet(item.value);
-        setStreetSuggestions([]);
+        if (!item.data.street_with_type) return;
+        setStreet(item.data.street_with_type);
         setShowStreetDropdown(false);
-        setHouse('');
-        setApartment('');
+        setStreetSuggestions([]);
+    };
+
+    const handleHouseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setHouse(e.target.value);
     };
 
     const clearStreet = () => {
@@ -154,35 +168,21 @@ const DeliverySection = () => {
         setStreetSuggestions([]);
         setShowStreetDropdown(false);
         setHouse('');
-        setHouseSuggestions([]);
-        setShowHouseDropdown(false);
         setApartment('');
-    };
-
-    const handleHouseChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = e.target.value;
-        setHouse(val);
-        setApartment('');
-        if (houseTimeoutRef.current) clearTimeout(houseTimeoutRef.current);
-        houseTimeoutRef.current = setTimeout(() => {
-            // fetchHouses(val, streetFiasId) — опционально
-        }, 300);
     };
 
     const clearHouse = () => {
         setHouse('');
-        setHouseSuggestions([]);
-        setShowHouseDropdown(false);
         setApartment('');
     };
 
     return (
         <section className={styles.deliverySection}>
             <h3>Способ доставки</h3>
-            {/* Город (отдельно) */}
+            {/* Поле ввода города */}
             <div className={styles.formRow}>
                 <label>Город*</label>
-                <div className={styles.inputWrapper}>
+                <div className={styles.inputWrapper} ref={cityWrapperRef}>
                     <input
                         type="text"
                         placeholder="Город"
@@ -199,158 +199,190 @@ const DeliverySection = () => {
                     )}
                     {showCityDropdown && citySuggestions.length > 0 && (
                         <ul className={styles.dropdown}>
-                            {citySuggestions.map((sug, i) => (
-                                <li
-                                    key={i}
-                                    className={styles.dropdownOption}
-                                    onClick={() => handleCitySelect(sug)}
-                                >
-                                    {sug.value}
-                                </li>
-                            ))}
+                            {citySuggestions.map((sug, i) => {
+                                const displayedValue = sug.value.replace(/(?:^|\s)(г)\s/gi, (match, g) => {
+                                    const prefix = match.startsWith(' ') ? ' ' : '';
+                                    return prefix + 'г. ';
+                                });
+                                return (
+                                    <li
+                                        key={i}
+                                        className={styles.dropdownOption}
+                                        onClick={() => handleCitySelect(sug)}
+                                    >
+                                        {displayedValue}
+                                    </li>
+                                );
+                            })}
                         </ul>
                     )}
                 </div>
             </div>
 
-            {/* КУРЬЕРСКАЯ ДОСТАВКА */}
-            <div
-                className={
-                    deliveryMethod === 'courier'
-                        ? `${styles.deliveryBlock} ${styles.deliveryBlockActive}`
-                        : styles.deliveryBlock
-                }
-            >
-                {/* Шапка (радио + слова) */}
-                <div className={styles.deliveryHeader}>
-                    <input
-                        type="radio"
-                        name="delivery"
-                        value="courier"
-                        checked={deliveryMethod === 'courier'}
-                        onChange={() => setDeliveryMethod('courier')}
-                    />
-                    <div className={styles.deliveryInfo}>
-                        <div className={styles.deliveryTitle}>Курьерская доставка</div>
-                        <div className={styles.deliverySubtitle}>
-                            Бесплатно от 3000 рублей, от 1 дня
+            {/* Блоки способов доставки отображаются только при выборе города */}
+            {cityFiasId && (
+                <>
+                    {/* Курьерская доставка */}
+                    <div
+                        className={
+                            deliveryMethod === 'courier'
+                                ? `${styles.deliveryBlock} ${styles.deliveryBlockActive}`
+                                : styles.deliveryBlock
+                        }
+                        onClick={() => setDeliveryMethod('courier')}
+                    >
+                        <div className={styles.deliveryHeader}>
+                            <input
+                                type="radio"
+                                name="delivery"
+                                value="courier"
+                                checked={deliveryMethod === 'courier'}
+                                onChange={() => setDeliveryMethod('courier')}
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                            <div className={styles.deliveryInfo}>
+                                <div className={styles.deliveryTitle}>Курьерская доставка</div>
+                                <div className={styles.deliverySubtitle}>
+                                    Бесплатно от 3000 рублей, от 1 дня
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                {/* Поля ниже, в отдельном контейнере */}
-                {deliveryMethod === 'courier' && (
-                    <div className={styles.deliveryFields}>
-                        {/* Улица (одна широкая строка) */}
-                        <div className={styles.formRow}>
-                            <div className={styles.inputWrapper}>
-                                <input
-                                    type="text"
-                                    placeholder="Улица"
-                                    value={street}
-                                    disabled={!cityFiasId}
-                                    onChange={handleStreetChange}
-                                    onFocus={() => {
-                                        if (streetSuggestions.length > 0) setShowStreetDropdown(true);
-                                    }}
-                                />
-                                {street && (
-                                    <button className={styles.clearBtn} onClick={clearStreet}>
-                                        ✖
-                                    </button>
-                                )}
-                                {showStreetDropdown && streetSuggestions.length > 0 && (
-                                    <ul className={styles.dropdown}>
-                                        {streetSuggestions.map((item, idx) => (
-                                            <li
-                                                key={idx}
-                                                className={styles.dropdownOption}
-                                                onClick={() => handleStreetSelect(item)}
+                        {deliveryMethod === 'courier' && (
+                            <div
+                                className={styles.deliveryFields}
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                {/* Улица */}
+                                <div className={styles.formRow}>
+                                    <div className={styles.inputWrapper}>
+                                        <input
+                                            type="text"
+                                            placeholder="Улица"
+                                            value={street}
+                                            disabled={!cityFiasId}
+                                            onChange={handleStreetChange}
+                                            onFocus={() => {
+                                                if (streetSuggestions.length > 0)
+                                                    setShowStreetDropdown(true);
+                                            }}
+                                        />
+                                        {street && (
+                                            <button
+                                                className={styles.clearBtn}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    clearStreet();
+                                                }}
                                             >
-                                                {item.value}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </div>
-                        </div>
-                        {/* Дом + Квартира (в одну строку) */}
-                        <div className={styles.twoFieldsRow}>
-                            <div className={styles.formRow}>
-                                <div className={styles.inputWrapper}>
-                                    <input
-                                        type="text"
-                                        placeholder="Дома"
-                                        value={house}
-                                        disabled={!street}
-                                        onChange={handleHouseChange}
-                                    />
-                                    {house && (
-                                        <button className={styles.clearBtn} onClick={clearHouse}>
-                                            ✖
-                                        </button>
-                                    )}
+                                                ✖
+                                            </button>
+                                        )}
+                                        {showStreetDropdown && streetSuggestions.length > 0 && (
+                                            <ul className={styles.dropdown}>
+                                                {streetSuggestions.map((item, idx) => (
+                                                    <li
+                                                        key={idx}
+                                                        className={styles.dropdownOption}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            handleStreetSelect(item);
+                                                        }}
+                                                    >
+                                                        {item.value}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
+                                </div>
+                                {/* Дом + Квартира */}
+                                <div className={styles.twoFieldsRow} onClick={(e) => e.stopPropagation()}>
+                                    <div className={styles.formRow}>
+                                        <div className={styles.inputWrapper}>
+                                            <input
+                                                type="text"
+                                                placeholder="Дом"
+                                                value={house}
+                                                disabled={!street}
+                                                onChange={handleHouseChange}
+                                            />
+                                            {house && (
+                                                <button
+                                                    className={styles.clearBtn}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        clearHouse();
+                                                    }}
+                                                >
+                                                    ✖
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className={styles.formRow}>
+                                        <div className={styles.inputWrapper}>
+                                            <input
+                                                type="text"
+                                                placeholder="Квартира/офис"
+                                                value={apartment}
+                                                disabled={!house}
+                                                onChange={(e) => setApartment(e.target.value)}
+                                            />
+                                            {apartment && (
+                                                <button
+                                                    className={styles.clearBtn}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setApartment('');
+                                                    }}
+                                                >
+                                                    ✖
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div className={styles.formRow}>
-                                <div className={styles.inputWrapper}>
-                                    <input
-                                        type="text"
-                                        placeholder="Квартира/офис"
-                                        value={apartment}
-                                        disabled={!house}
-                                        onChange={(e) => setApartment(e.target.value)}
-                                    />
-                                    {apartment && (
-                                        <button
-                                            className={styles.clearBtn}
-                                            onClick={() => setApartment('')}
-                                        >
-                                            ✖
-                                        </button>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
+                        )}
                     </div>
-                )}
-            </div>
 
-            {/* ПУНКТ САМОВЫВОЗА */}
-            <div
-                className={
-                    deliveryMethod === 'pickup'
-                        ? `${styles.deliveryBlock} ${styles.deliveryBlockActive}`
-                        : styles.deliveryBlock
-                }
-            >
-                {/* Шапка (радио + слова) */}
-                <div className={styles.deliveryHeader}>
-                    <input
-                        type="radio"
-                        name="delivery"
-                        value="pickup"
-                        checked={deliveryMethod === 'pickup'}
-                        onChange={() => setDeliveryMethod('pickup')}
-                    />
-                    <div className={styles.deliveryInfo}>
-                        <div className={styles.deliveryTitle}>Пункт самовывоза</div>
-                        <div className={styles.deliverySubtitle}>
-                            Бесплатно от 3000 рублей, от 1 дня
+                    {/* Пункт самовывоза */}
+                    <div
+                        className={
+                            deliveryMethod === 'pickup'
+                                ? `${styles.deliveryBlock} ${styles.deliveryBlockActive}`
+                                : styles.deliveryBlock
+                        }
+                        onClick={() => setDeliveryMethod('pickup')}
+                    >
+                        <div className={styles.deliveryHeader}>
+                            <input
+                                type="radio"
+                                name="delivery"
+                                value="pickup"
+                                checked={deliveryMethod === 'pickup'}
+                                onChange={() => setDeliveryMethod('pickup')}
+                                onClick={(e) => e.stopPropagation()}
+                            />
+                            <div className={styles.deliveryInfo}>
+                                <div className={styles.deliveryTitle}>Пункт самовывоза</div>
+                                <div className={styles.deliverySubtitle}>
+                                    Бесплатно от 3000 рублей, от 1 дня
+                                </div>
+                            </div>
                         </div>
+                        {deliveryMethod === 'pickup' && (
+                            <div className={styles.deliveryFields} onClick={(e) => e.stopPropagation()}>
+                                <Link href="/pickup-points" className={styles.pickupLink}>
+                                    Выбрать пункт выдачи
+                                </Link>
+                            </div>
+                        )}
                     </div>
-                </div>
-                {/* Ссылка ниже */}
-                {deliveryMethod === 'pickup' && (
-                    <div className={styles.deliveryFields}>
-                        <Link href="/pickup-points" className={styles.pickupLink}>
-                            Выбрать пункт выдачи
-                        </Link>
-                    </div>
-                )}
-            </div>
+                </>
+            )}
         </section>
     );
 };
 
 export default DeliverySection;
-

@@ -7,13 +7,12 @@
     .form {
         display: flex;
         flex-direction: column;
-        gap: 40px;
+        gap: 30px;
     }
 
     .formGroup {
         display: flex;
         flex-direction: column;
-        // gap: 10px;
 
         label {
             margin-bottom: 10px;
@@ -24,11 +23,21 @@
     input[type="text"],
     input[type="tel"],
     input[type="email"] {
+        width: 100%;
         padding: 10px;
         margin-bottom: 15px;
         font-size: 16px;
         border: 1px solid #ccc;
         height: 60px;
+    }
+
+    input:focus-visible {
+        outline: none;
+        border: 1px solid #666;
+    }
+
+    .cityInput {
+        margin-bottom: 0 !important;
     }
 
     .consent {
@@ -46,5 +55,55 @@
         color: #fff;
         border: none;
         cursor: pointer;
+    }
+
+    /* Стили для автодополнения */
+    .inputWrapper {
+        position: relative;
+    }
+
+    .clearBtn {
+        position: absolute;
+        top: 51%;
+        right: 10px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        font-size: 16px;
+        color: #999;
+        cursor: pointer;
+        line-height: 0;
+    }
+
+    .dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin-top: 5px;
+        border: 1px solid #666;
+        border-radius: 0;
+        /* Убираем закруглённость */
+        background: #fff;
+        max-height: 200px;
+        overflow-y: auto;
+        z-index: 999;
+        box-shadow: 0px 8px 20px 7px rgba(0, 0, 0, 0.2);
+    }
+
+    .dropdownOption {
+        padding: 10px;
+        font-size: 14px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+        transition: color 0.2s ease;
+
+        &:hover {
+            color: #959595;
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
     }
 }

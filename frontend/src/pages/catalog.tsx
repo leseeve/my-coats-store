@@ -8,7 +8,7 @@ import { FiltersPanel } from '@/components/FiltersPanel';
 import { SortDropdown, SortOption } from '@/components/SortDropdown';
 import { ProductGrid, Product } from '@/components/ProductGrid';
 import { Pagination } from '@/components/Pagination';
-import { transliterate } from '@/utils/transliterate';
+import { transliterate } from '@/pages/api/utils/transliterate';
 import styles from '@/styles/Catalog.module.scss';
 
 // Примерный массив товаров
@@ -17,6 +17,39 @@ const productsData: Product[] = [
     id: 1,
     title: 'Жилет',
     price: 1000,
+    images: ['/images/coat1.jpg', '/images/coat1_2.jpg'],
+    availableSizes: [
+      { size: 40, available: true },
+      { size: 42, available: false },
+      { size: 44, available: true },
+    ],
+  },
+  {
+    id: 2,
+    title: 'Жилет',
+    price: 2000,
+    images: ['/images/coat1.jpg', '/images/coat1_2.jpg'],
+    availableSizes: [
+      { size: 40, available: true },
+      { size: 42, available: false },
+      { size: 44, available: true },
+    ],
+  },
+  {
+    id: 3,
+    title: 'Жилет',
+    price: 30000,
+    images: ['/images/coat1.jpg', '/images/coat1_2.jpg'],
+    availableSizes: [
+      { size: 40, available: true },
+      { size: 42, available: false },
+      { size: 44, available: true },
+    ],
+  },
+  {
+    id: 4,
+    title: 'Жилет',
+    price: 20000,
     images: ['/images/coat1.jpg', '/images/coat1_2.jpg'],
     availableSizes: [
       { size: 40, available: true },

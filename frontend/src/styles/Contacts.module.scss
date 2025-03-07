@@ -32,7 +32,6 @@
         min-width: 250px;
         padding: 15px;
         border: 1px solid #ddd;
-        /* Убираем border-radius */
         text-align: left;
 
         h2 {
@@ -51,8 +50,6 @@
             }
         }
 
-        /* Для блока адреса: убираем любые дополнительные стили,
-         оставляем простой текст */
         p {
             margin: 0;
             font-size: 16px;

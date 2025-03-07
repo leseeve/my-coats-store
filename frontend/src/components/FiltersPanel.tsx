@@ -1,3 +1,4 @@
+import { BiMinus, BiPlus } from "react-icons/bi";
 import React, { useState, useEffect } from 'react';
 import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
@@ -115,7 +116,7 @@ export const FiltersPanel: React.FC<FiltersPanelProps> = ({
                             onClick={() => setColorListOpen(!colorListOpen)}
                         >
                             <span className={styles.filterToggle}>
-                                {colorListOpen ? '-' : '+'}
+                                {colorListOpen ? <BiMinus /> : <BiPlus />}
                             </span>
                             <span className={styles.filterTitle}>Цвет</span>
                             <button
@@ -150,7 +151,7 @@ export const FiltersPanel: React.FC<FiltersPanelProps> = ({
                             onClick={() => setSizeListOpen(!sizeListOpen)}
                         >
                             <span className={styles.filterToggle}>
-                                {sizeListOpen ? '-' : '+'}
+                                {sizeListOpen ? <BiMinus /> : <BiPlus />}
                             </span>
                             <span className={styles.filterTitle}>Размер</span>
                             <button

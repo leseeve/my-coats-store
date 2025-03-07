@@ -8,7 +8,7 @@ import { FiltersPanel } from '@/components/FiltersPanel';
 import { SortDropdown, SortOption } from '@/components/SortDropdown';
 import { ProductGrid, Product } from '@/components/ProductGrid';
 import { Pagination } from '@/components/Pagination';
-import { transliterate } from '@/utils/transliterate';
+import { transliterate } from '@/pages/api/utils/transliterate';
 import styles from '@/styles/CatalogCategory.module.scss';
 
 // Примерный массив товаров
@@ -70,6 +70,21 @@ export default function CategoryPage() {
     const [selectedColors, setSelectedColors] = useState<string[]>([]);
     const [selectedSizes, setSelectedSizes] = useState<number[]>([]);
     const [currentSort, setCurrentSort] = useState<string>('default');
+
+    useEffect(() => {
+        if (!router.isReady) return;
+        if (category && typeof category === 'string') {
+            // Ищем оригинальное название категории по slug из URL
+            const found = allCategories.find(cat => transliterate(cat) === category);
+            if (found) {
+                setSelectedCategory(found);
+            } else {
+                setSelectedCategory('Каталог');
+            }
+        } else {
+            setSelectedCategory('Каталог');
+        }
+    }, [router.isReady, category]);
 
     // Хлебные крошки
     const breadcrumbs: BreadcrumbItem[] =

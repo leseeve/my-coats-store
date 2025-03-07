@@ -8,7 +8,7 @@
         margin-bottom: 15px;
     }
 
-    /* Общие стили для label+input */
+    /* Стили для строк формы */
     .formRow {
         display: flex;
         flex-direction: column;
@@ -34,6 +34,16 @@
                     background: #f9f9f9;
                     cursor: not-allowed;
                 }
+
+                &:focus-visible {
+                    outline: none;
+                    border: 1px solid #666;
+                }
+            }
+
+            /* Поле ввода города – убираем нижний отступ */
+            .cityInput {
+                margin-bottom: 0 !important;
             }
 
             .clearBtn {
@@ -46,6 +56,7 @@
                 font-size: 16px;
                 color: #999;
                 cursor: pointer;
+                line-height: 0;
             }
 
             .dropdown {
@@ -53,12 +64,16 @@
                 top: 100%;
                 left: 0;
                 right: 0;
-                border: 1px solid #ccc;
-                border-radius: 4px;
+                margin-top: 5px;
+                /* Прижимаем к нижней границе поля */
+                border: 1px solid #666;
+                border-radius: 0;
+                /* Без скруглений */
                 background: #fff;
                 max-height: 200px;
                 overflow-y: auto;
                 z-index: 999;
+                box-shadow: 0px 8px 20px 7px rgba(0, 0, 0, 0.2);
             }
 
             .dropdownOption {
@@ -66,9 +81,11 @@
                 font-size: 14px;
                 border-bottom: 1px solid #eee;
                 cursor: pointer;
+                transition: color 0.2s ease;
 
                 &:hover {
                     background: #f2f2f2;
+                    color: #959595;
                 }
 
                 &:last-child {
@@ -86,11 +103,11 @@
         .formRow {
             flex: 1;
             margin-bottom: 0;
-            /* убрать нижний отступ */
+            /* Убираем нижний отступ для полей в одной строке */
         }
     }
 
-    /* Общий контейнер для каждого способа (курьер / самовывоз) */
+    /* Стили для блоков способов доставки */
     .deliveryBlock {
         border: 1px solid #ccc;
         margin-bottom: 15px;
@@ -105,7 +122,6 @@
         .deliveryHeader {
             display: flex;
             align-items: flex-start;
-            /* чтобы radio и заголовок сверху совпадали */
             gap: 10px;
             margin-bottom: 10px;
 
@@ -132,7 +148,6 @@
             color: #666;
         }
 
-        /* Поля внутри блока: отдельный контейнер */
         .deliveryFields {
             margin-top: 10px;
         }

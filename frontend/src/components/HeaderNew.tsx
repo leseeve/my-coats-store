@@ -5,7 +5,7 @@ import { GoPerson, GoHeart, GoSearch } from 'react-icons/go';
 import { IoBagOutline } from 'react-icons/io5';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import { useRouter } from 'next/router';
-import { transliterate } from '@/utils/transliterate';
+import { transliterate } from '@/pages/api/utils/transliterate';
 import styles from '@/styles/HeaderNew.module.scss';
 
 const HeaderNew: React.FC = () => {
@@ -121,24 +121,25 @@ const HeaderNew: React.FC = () => {
             {/* Оверлей поиска */}
             {searchOpen && (
                 <div className={styles.searchOverlay} onClick={handleCloseSearch}>
-                    <div
-                        className={styles.searchContent}
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <input
-                            type="text"
-                            placeholder="Поиск..."
-                            className={styles.searchInput}
-                        />
-                        <button className={styles.applySearchBtn} onClick={handleApplySearch}>
-                            Найти
-                        </button>
-                        <button className={styles.closeBtn} onClick={handleCloseSearch}>
-                            Закрыть
-                        </button>
+                    <div className={`${styles.searchWrapper} ${searchOpen ? styles.active : ''}`}
+                        onClick={(e) => e.stopPropagation()}>
+                        <div
+                            className={`${styles.searchContent} ${searchOpen ? styles.active : ''}`}
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <input
+                                type="text"
+                                placeholder="Поиск..."
+                                className={styles.searchInput}
+                            />
+                            <button className={styles.applySearchBtn} onClick={handleApplySearch}>
+                                Найти
+                            </button>
+                        </div>
                     </div>
                 </div>
-            )}
+            )
+            }
 
             {/* Панель меню (каталога) */}
             <div
@@ -178,7 +179,7 @@ const HeaderNew: React.FC = () => {
             <button className={styles.scrollDownBtn} onClick={handleScrollDown}>
                 <span>К покупкам</span>
             </button>
-        </header>
+        </header >
     );
 };
 

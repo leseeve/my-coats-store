@@ -1,7 +1,6 @@
 .filtersButton {
     padding: 10px 0 10px 0;
     text-align: left;
-    // border: 1px solid #ddd;
     border: none;
     background-color: transparent;
     cursor: pointer;
@@ -49,7 +48,7 @@
     width: 480px;
     background-color: white;
     height: 100%;
-    padding: 30px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
     transform: translateX(-100%);
@@ -65,7 +64,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 16px;
+    font-size: 20px;
     flex-shrink: 0;
 }
 
@@ -84,10 +83,11 @@
     border: none;
     flex-shrink: 0;
     margin: 10px 0;
+    text-align: left;
 }
 
 .priceFilter {
-    margin: 20px 0;
+    margin: 10px 0 20px 0;
 }
 
 .rangeWrapper {
@@ -96,7 +96,7 @@
 
 .colorFilter,
 .sizeFilter {
-    margin: 20px 0;
+    // margin: 10px 0;
 }
 
 .filterHeader {
@@ -104,19 +104,21 @@
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-    font-size: 14px;
-    padding: 5px 0;
+    font-size: 16px;
+    padding: 0 0 20px 0;
 }
 
 .filterToggle {
     font-size: 18px;
     margin-right: 5px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .filterTitle {
     flex: 1;
-    font-weight: bold;
 }
 
 .resetButtonFilter {
@@ -130,8 +132,20 @@
 .filterOptions {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    padding-left: 10px;
+    gap: 15px; // вертикальный отступ между самими label
+    padding-bottom: 20px;
+    padding-left: 15px;
+
+    label {
+        display: flex;
+        align-items: center;
+        gap: 8px; // отступ между чекбоксом и текстом
+    }
+
+    input {
+        width: 17px;
+        height: 17px;
+    }
 }
 
 .showProductsButtonContainer {
@@ -140,14 +154,14 @@
 
 .showProductsButton {
     margin-top: auto;
-    padding: 10px 20px;
+    padding: 15px 20px;
     background-color: black;
     color: white;
-    font-size: 14px;
+    font-size: 16px;
     cursor: pointer;
     border: none;
     width: 100%;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     transition: background-color 0.3s ease;
 
     &:hover {

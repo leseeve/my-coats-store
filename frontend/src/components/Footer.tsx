@@ -29,10 +29,10 @@ const Footer: React.FC = () => {
 
         <div className={styles.footerCenter}>
           <ul>
+            <li><Link href="/#">Оплата</Link></li>
             <li><Link href="/shipping-and-return">Доставка и возврат</Link></li>
             <li><Link href="/catalog/how-to-choose-size">Как подобрать размер</Link></li>
-            <li><Link href="/catalog/care">Уход за изделиями</Link></li>
-            <li><Link href="/catalog/privacy-policy">Политика конфиденциальности</Link></li>
+            <li><Link href="privacy">Политика конфиденциальности</Link></li>
             <li><Link href="/catalog/public-offer">Публичная оферта</Link></li>
             <li><Link href="/contacts">Контакты</Link></li>
             <li><Link href="/notifications">Уведомления</Link></li>

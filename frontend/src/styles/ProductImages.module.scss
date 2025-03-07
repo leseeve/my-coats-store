@@ -12,10 +12,23 @@
 
             .swiper-slide {
                 cursor: pointer;
-                opacity: 0.6;
-                transition: opacity 0.3s;
 
+                // Стиль для активного слайда thumbs
                 &.swiper-slide-thumb-active {
+                    .thumbImage {
+                        opacity: 1 !important; // !important для перебивания hover
+                    }
+                }
+            }
+
+            .thumbImage {
+                transition: opacity 0.3s;
+                opacity: 0.6;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+
+                &:hover {
                     opacity: 1;
                 }
             }
@@ -44,14 +57,13 @@
             transform: translateY(-50%);
             width: 40px;
             height: 40px;
-            // background-color: rgba(0, 0, 0, 0.5);
             color: black;
             display: none;
             z-index: 10;
             cursor: pointer;
 
             &:hover {
-                background-color: rgba(0, 0, 0, 0.7);
+                // background-color: rgba(0, 0, 0, 0.7);
             }
         }
 

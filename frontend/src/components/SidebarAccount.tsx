@@ -15,6 +15,7 @@ const primaryNavItems = [
 ];
 
 const secondaryNavItems = [
+    { label: 'ОПЛАТА', href: '/#' },
     { label: 'ДОСТАВКА И ВОЗВРАТ', href: '/shipping-and-return' },
     { label: 'УВЕДОМЛЕНИЯ', href: '/notifications' },
     { label: 'СЛУЖБА ПОДДЕРЖКИ', href: '/contacts' },

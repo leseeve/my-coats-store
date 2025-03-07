@@ -1,10 +1,13 @@
 .accordion {
-    // max-width: 1440px;
-    // margin: 20px auto;
     padding: 20px 0;
 
     .accordionItem {
         border-bottom: 1px solid #ccc;
+
+        /* Верхняя граница у первого элемента */
+        &:first-of-type {
+            border-top: 1px solid #ccc;
+        }
 
         .accordionButton {
             background: none;
@@ -28,9 +31,32 @@
         }
 
         .accordionContent {
-            padding: 10px 0;
+            padding-bottom: 15px;
             font-size: 16px;
             line-height: 1.5;
+
+            p {
+                margin: 12px 0; // Отступы между абзацами
+                line-height: 1.6;
+
+                &:first-child {
+                    margin-top: 0;
+                }
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+
+            /* Стили ссылок */
+            a {
+                color: #888;
+                text-decoration: none;
+
+                &:hover {
+                    color: black;
+                }
+            }
         }
     }
 }

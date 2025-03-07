@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GoHeart, GoHeartFill } from 'react-icons/go';
+import { IoIosArrowDown } from 'react-icons/io'; // Импорт иконки стрелки
 import styles from '@/styles/ProductDetails.module.scss';
 
 interface ProductDetailsProps {
@@ -50,32 +51,37 @@ const ProductDetails = ({ product }: ProductDetailsProps) => {
             <p className={styles.productPrice}>{product.price} ₽</p>
 
             {/* Контейнер для кнопки + списка */}
-            <div
-                className={`${styles.sizeSelector} ${isSizeDropdownOpen ? styles.active : ''
-                    }`}
-            >
+            <div className={`${styles.sizeSelector} ${isSizeDropdownOpen ? styles.active : ''}`}>
                 <button
                     className={styles.sizeButton}
                     onClick={() => setIsSizeDropdownOpen(!isSizeDropdownOpen)}
                 >
-                    {selectedSize ? `Размер: ${selectedSize}` : 'Выберите размер'}
+                    <span>{selectedSize ? `Размер: ${selectedSize}` : 'Выберите размер'}</span>
+                    {/* Стрелочка, вращается при открытии */}
+                    <IoIosArrowDown
+                        className={`${styles.arrowIcon} ${isSizeDropdownOpen ? styles.open : ''}`}
+                    />
                 </button>
 
+                {/* Оверлей для затемнения */}
+                <div
+                    className={
+                        isSizeDropdownOpen
+                            ? `${styles.overlay} ${styles.overlayShow}`
+                            : styles.overlay
+                    }
+                    onClick={() => setIsSizeDropdownOpen(false)}
+                />
+
+                {/* Список размеров */}
                 {isSizeDropdownOpen && (
-                    <>
-                        {/* Оверлей */}
-                        <div
-                            className={styles.overlay}
-                            onClick={() => setIsSizeDropdownOpen(false)}
-                        />
-                        <ul ref={dropdownRef} className={styles.sizeList}>
-                            {product.sizes.map((size) => (
-                                <li key={size} onClick={() => selectSize(size)}>
-                                    {size}
-                                </li>
-                            ))}
-                        </ul>
-                    </>
+                    <ul ref={dropdownRef} className={styles.sizeList}>
+                        {product.sizes.map((size) => (
+                            <li key={size} onClick={() => selectSize(size)}>
+                                {size}
+                            </li>
+                        ))}
+                    </ul>
                 )}
             </div>
 
